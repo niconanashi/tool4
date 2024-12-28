@@ -41,8 +41,9 @@
 			"virtualPath": "script/aez_bundle_main.js"
 		}
 	},
+	"defaultLoadingScene": "none",
 	"environment": {
-		"sandbox-runtime": "2",
+		"sandbox-runtime": "3",
 		"nicolive": {
 			"supportedModes": [
 				"multi"
@@ -52,9 +53,14 @@
 			"send": "0"
 		},
 		"akashic-runtime": {
-			"version": "~2.2.2-0",
+			"version": "~3.9.4-0",
 			"flavor": "-canvas"
 		}
+	},
+	"globalScripts": [],
+	"moduleMainScripts": {
+		"@akashic-extension/akashic-box2d": "node_modules/@akashic-extension/akashic-box2d/lib/index.js",
+		"box2dweb": "node_modules/box2dweb/box2d.js"
 	},
 	"exportZipInfo": {
 		"version": "1.8.34",
@@ -65,6 +71,5 @@
 			"targetService": "nicolive",
 			"nicolive": true
 		}
-	},
-	"globalScripts": []
+	}
 }
