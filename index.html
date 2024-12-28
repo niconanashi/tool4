@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>出すツールメーカー2</title>
+	<title>落とすツールメーカー</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 	<style>
@@ -46,8 +46,9 @@
 	</style>
 </head>
 <body>
-	<h1>出すツールメーカー2</h1>
+	<h1>落とすツールメーカー</h1>
 	<p>このページを使って、ニコ生ゲームの投稿ファイル（game.zip）を簡単に作成できます。</p>
+	<p>画像が質量を持ったブロックとして表示されます。</p>
 	<h2>使い方</h2>
 	<ol>
 		<li>表示されている画像にドラッグ＆ドロップまたはペーストで新しい画像に変更します。</li>
@@ -55,6 +56,8 @@
 		<li>ダウンロードしたファイルをニコ生ゲームとして投稿します。</li>
 	</ol>
 	<p>※画像はPNG形式で、幅と高さが10ピクセル以上500ピクセル以下である必要があります。</p>
+	<p>画像が正方形に近い場合（幅、高さの差が5ピクセル未満）　：　円形の当たり判定を持ったブロック</p>
+	<p>画像が長方形の場合　：　画像サイズの長方形の当たり判定を持ったブロック</p>
 	<div class="image-container">
 		<div>
 			<img id="heart" src="game/files/heart.png" alt="heart">
