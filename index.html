@@ -53,7 +53,7 @@
     </style>
 </head>
 <body>
-    <h1>車メーカー</h1>
+    <h1>車メーカー1</h1>
     <p>このページを使って、ニコ生ゲームの投稿ファイル（game.zip）を簡単に作成できます。</p>
     <p>画像が車になります。</p>
     <h2>使い方</h2>
@@ -214,7 +214,7 @@
             fetchPromises.push((async () => {
                 const response = await fetch(filePath);
                 const blob = await response.blob();
-                zip.file(filePath.replace('game/files/', ''), blob);
+                zip.file(`files/${filePath.split('/').pop()}`, blob);
             })());
         });
         await Promise.all(fetchPromises);
@@ -224,5 +224,6 @@
     });
     loadColorJson();
 </script>
+
 </body>
 </html>
