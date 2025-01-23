@@ -43,6 +43,13 @@
             color: red;
             margin-top: 10px;
         }
+        .color-sample {
+            display: inline-block;
+            width: 50px;
+            height: 20px;
+            margin-left: 10px;
+            border: 1px solid #000;
+        }
     </style>
 </head>
 <body>
@@ -67,9 +74,9 @@
     <p>背景、地面、文字の色を変更できます。</p>
     <p>初期カラー</p> 　
 
-    <p>背景：#0F5474</p>
-    <p>地面：#977609</p>
-    <p>文字：white</p>
+    <p>背景：<span class="color-sample" id="bgColorSample"></span></p>
+    <p>地面：<span class="color-sample" id="floorColorSample"></span></p>
+    <p>文字：<span class="color-sample" id="textColorSample"></span></p>
 
     <h2>色の変更</h2>
     <label for="bgColor">背景色:</label>
@@ -126,6 +133,12 @@
             document.getElementById('bgColor').value = colors.bgColor;
             document.getElementById('floorColor').value = colors.floorColor;
             document.getElementById('textColor').value = colors.textColor;
+            updateColorSamples();
+        }
+        function updateColorSamples() {
+            document.getElementById('bgColorSample').style.backgroundColor = colors.bgColor;
+            document.getElementById('floorColorSample').style.backgroundColor = colors.floorColor;
+            document.getElementById('textColorSample').style.backgroundColor = colors.textColor;
         }
         function handleDrop(event) {
             event.preventDefault();
