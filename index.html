@@ -10,11 +10,15 @@
         body {
             font-size: 18px;
         }
-        .image-container {
+        .container {
             display: flex;
+            flex-wrap: wrap;
             gap: 20px;
         }
-        .image-container div {
+        .item {
+            width: 150px;
+        }
+        .image-container {
             position: relative;
             width: 150px;
             height: 150px;
@@ -34,6 +38,13 @@
             height: 100%;
             opacity: 0;
         }
+        .color-sample {
+            display: inline-block;
+            width: 50px;
+            height: 20px;
+            margin-left: 10px;
+            border: 1px solid #000;
+        }
         button {
             font-size: 18px;
             padding: 10px 20px;
@@ -43,19 +54,11 @@
             color: red;
             margin-top: 10px;
         }
-        .color-sample {
-            display: inline-block;
-            width: 50px;
-            height: 20px;
-            margin-left: 10px;
-            border: 1px solid #000;
-        }
     </style>
 </head>
 <body>
-    <h1>車メーカー1</h1>
+    <h1>車メーカー2</h1>
     <p>このページを使って、ニコ生ゲームの投稿ファイル（game.zip）を簡単に作成できます。</p>
-    <p>画像が車になります。</p>
     <h2>使い方</h2>
     <ol>
         <li>表示されている画像にドラッグ＆ドロップまたはペーストで新しい画像に変更します。</li>
@@ -63,13 +66,36 @@
         <li>ダウンロードしたファイルをニコ生ゲームとして投稿します。</li>
     </ol>
     <p>※画像はPNG形式で、幅と高さが10ピクセル以上500ピクセル以下である必要があります。</p>
-    <p>パーツのサイズは画像サイズになります。</p>
-    <p>初期サイズ</p>
 
-    <p>タイヤ ： 50x50</p>
-    <p>車体 ： 200x100</p>
-    <p>木 　： 80x200</p>
-    <p>サボテン： 100x150</p>
+    <div class="container">
+        <div class="item">
+            <h3>初期サイズ</h3>
+            <p>タイヤ ： 50x50</p>
+            <p>車体 ： 200x100</p>
+            <p>木 　： 80x200</p>
+            <p>サボテン： 100x150</p>
+        </div>
+
+        <div class="item">
+            <h3>画像変更</h3>
+            <div class="image-container">
+                <img id="car" src="game/files/car.png" alt="car">
+                <textarea></textarea>
+            </div>
+            <div class="image-container">
+                <img id="tire" src="game/files/tire.png" alt="tire">
+                <textarea></textarea>
+            </div>
+            <div class="image-container">
+                <img id="ki" src="game/files/ki.png" alt="ki">
+                <textarea></textarea>
+            </div>
+            <div class="image-container">
+                <img id="sabo" src="game/files/sabo.png" alt="sabo">
+                <textarea></textarea>
+            </div>
+        </div>
+    </div>
 
     <p>背景、地面、文字の色を変更できます。</p>
     <p>初期カラー</p> 　
@@ -86,24 +112,6 @@
     <label for="textColor">文字色:</label>
     <input type="color" id="textColor" name="textColor" value="white"><br>
 
-    <div class="image-container">
-        <div>
-            <img id="car" src="game/files/car.png" alt="car">
-            <textarea></textarea>
-        </div>
-        <div>
-            <img id="tire" src="game/files/tire.png" alt="tire">
-            <textarea></textarea>
-        </div>
-        <div>
-            <img id="ki" src="game/files/ki.png" alt="ki">
-            <textarea></textarea>
-        </div>
-        <div>
-            <img id="sabo" src="game/files/sabo.png" alt="sabo">
-            <textarea></textarea>
-        </div>
-    </div>
     <button id="downloadZip">game.zip をダウンロード</button>
     <div id="warning"></div>
 <script>
@@ -114,14 +122,17 @@
         "sabo": "game/files/sabo.png"
     };
     const audioFiles = [
-        "game/files/sound1.aac",
-        "game/files/sound2.ogg"
-        // 他の音声ファイルもここに追加できます
+        "game/files/bgm.aac",
+        "game/files/bgm.ogg",
+        "game/files/on.aac",
+        "game/files/on.ogg",
+        "game/files/off.aac",
+        "game/files/off.ogg"
     ];
     let colors = {
         "bgColor": "#0F5474",
         "floorColor": "#977609",
-        "textColor": "white"
+        "textColor": "#FFFFFF"
     };
     document.querySelectorAll('.image-container div').forEach(div => {
         div.addEventListener('dragover', event => event.preventDefault());
