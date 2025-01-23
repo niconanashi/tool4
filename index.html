@@ -98,10 +98,12 @@
         h1, h2, h3 {
             color: #0078d7;
         }
+        label {
+            font-size: 18px;
+        }
         input[type="color"] {
-            width: 1.5em;
-            height: 1.5em;
-            padding: 0.5em;
+            width: 60px;
+            height: 60px;
             border: none;
             margin: 0.5em 0;
             cursor: pointer;
@@ -116,7 +118,7 @@
     </style>
 </head>
 <body>
-    <h1>車メーカー2</h1>
+    <h1>車メーカー4</h1>
     <p>このページを使って、ニコ生ゲームの投稿ファイル（game.zip）を簡単に作成できます。</p>
     <h2>使い方</h2>
     <ol>
@@ -171,11 +173,11 @@
 
     <h2>色の変更</h2>
     <label for="bgColor">背景色:</label>
-    <input type="color" id="bgColor" name="bgColor" value="#0F5474"><br>
+    <input type="color" id="bgColor" name="bgColor" value="#0F5474" style="width: 90px; height: 90px;"><br>
     <label for="floorColor">地面色:</label>
-    <input type="color" id="floorColor" name="floorColor" value="#977609"><br>
+    <input type="color" id="floorColor" name="floorColor" value="#977609" style="width: 90px; height: 90px;"><br>
     <label for="textColor">文字色:</label>
-    <input type="color" id="textColor" name="textColor" value="white"><br>
+    <input type="color" id="textColor" name="textColor" value="white" style="width: 90px; height: 90px;"><br>
 
     <button id="downloadZip">game.zip をダウンロード</button>
 <script>
