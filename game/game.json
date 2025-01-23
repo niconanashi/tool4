@@ -1,38 +1,92 @@
 {
 	"width": 1280,
 	"height": 720,
-	"fps": 30,
+	"fps": 60,
 	"main": "./script/aez_bundle_main.js",
 	"assets": {
-		"heart": {
+		"tire": {
 			"type": "image",
+			"path": "files/tire.png",
+			"width": 50,
+			"height": 50,
+			"hint": {
+				"untainted": true
+			},
+			"virtualPath": "image/tire.png"
+		},
+		"sabo": {
+			"type": "image",
+			"path": "files/sabo.png",
 			"width": 100,
-			"height": 100,
-			"path": "files/heart.png",
+			"height": 150,
 			"hint": {
 				"untainted": true
 			},
-			"virtualPath": "image/heart.png"
+			"virtualPath": "image/sabo.png"
 		},
-		"spade": {
+		"ki": {
 			"type": "image",
-			"width": 200,
+			"path": "files/ki.png",
+			"width": 80,
 			"height": 200,
-			"path": "files/spade.png",
 			"hint": {
 				"untainted": true
 			},
-			"virtualPath": "image/spade.png"
+			"virtualPath": "image/ki.png"
 		},
-		"sparkle": {
+		"bgm": {
+			"type": "audio",
+			"path": "files/bgm",
+			"systemId": "music",
+			"duration": 41701,
+			"hint": {
+				"extensions": [
+					".aac",
+					".ogg"
+				]
+			},
+			"virtualPath": "audio/bgm"
+		},
+		"off": {
+			"type": "audio",
+			"path": "files/off",
+			"systemId": "sound",
+			"duration": 5735,
+			"hint": {
+				"extensions": [
+					".aac",
+					".ogg"
+				]
+			},
+			"virtualPath": "audio/off"
+		},
+		"on": {
+			"type": "audio",
+			"path": "files/on",
+			"systemId": "sound",
+			"duration": 4612,
+			"hint": {
+				"extensions": [
+					".aac",
+					".ogg"
+				]
+			},
+			"virtualPath": "audio/on"
+		},
+		"color": {
+			"type": "text",
+			"path": "files/color.json",
+			"virtualPath": "text/color.json"
+		},
+		"car": {
 			"type": "image",
-			"width": 400,
-			"height": 400,
-			"path": "files/sparkle.png",
+			"path": "files/car.png",
+			"width": 200,
+			"height": 100,
 			"hint": {
 				"untainted": true
 			},
-			"virtualPath": "image/sparkle.png"
+			"virtualPath": "image/car.png"
 		},
 		"aez_bundle_main": {
 			"type": "script",
@@ -41,13 +95,15 @@
 			"virtualPath": "script/aez_bundle_main.js"
 		}
 	},
-	"defaultLoadingScene": "none",
 	"environment": {
 		"sandbox-runtime": "3",
 		"nicolive": {
 			"supportedModes": [
-				"multi"
-			]
+				"ranking"
+			],
+			"preferredSessionParameters": {
+				"totalTimeLimit": 37
+			}
 		},
 		"external": {
 			"send": "0"
