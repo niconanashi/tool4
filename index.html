@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>落とすツールメーカー</title>
+	<title>車メーカー</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 	<style>
@@ -46,9 +46,9 @@
 	</style>
 </head>
 <body>
-	<h1>落とすツールメーカー</h1>
+	<h1>車メーカー</h1>
 	<p>このページを使って、ニコ生ゲームの投稿ファイル（game.zip）を簡単に作成できます。</p>
-	<p>画像が質量を持ったブロックとして表示されます。</p>
+	<p>画像が車になります。</p>
 	<h2>使い方</h2>
 	<ol>
 		<li>表示されている画像にドラッグ＆ドロップまたはペーストで新しい画像に変更します。</li>
@@ -56,19 +56,35 @@
 		<li>ダウンロードしたファイルをニコ生ゲームとして投稿します。</li>
 	</ol>
 	<p>※画像はPNG形式で、幅と高さが10ピクセル以上500ピクセル以下である必要があります。</p>
-	<p>画像が正方形に近い場合（幅、高さの差が5ピクセル未満）　：　円形の当たり判定を持ったブロック</p>
-	<p>画像が長方形の場合　：　画像サイズの長方形の当たり判定を持ったブロック</p>
+	<p>パーツのサイズは画像サイズになります。</p>
+	<p>初期サイズ</p>
+
+	<p>タイヤ ： 50x50</p>
+	<p>車体 ： 200x100</p>
+	<p>木 　： 80x200</p>
+	<p>サボテン： 100x150</p>
+
+	<p>背景、地面、文字の色を変更できます。</p>
+	<p>初期カラー</p> 　
+
+	<p>背景：#0F5474</p>
+	<p>地面：#977609</p>
+	<p>文字：white</p>
 	<div class="image-container">
 		<div>
-			<img id="heart" src="game/files/heart.png" alt="heart">
+			<img id="car" src="game/files/car.png" alt="car">
 			<textarea></textarea>
 		</div>
 		<div>
-			<img id="spade" src="game/files/spade.png" alt="spade">
+			<img id="tire" src="game/files/tire.png" alt="tire">
 			<textarea></textarea>
 		</div>
 		<div>
-			<img id="sparkle" src="game/files/sparkle.png" alt="sparkle">
+			<img id="ki" src="game/files/ki.png" alt="ki">
+			<textarea></textarea>
+		</div>
+		<div>
+			<img id="sabo" src="game/files/ki.png" alt="sabo">
 			<textarea></textarea>
 		</div>
 	</div>
@@ -76,9 +92,10 @@
 	<div id="warning"></div>
 	<script>
 		const images = {
-			"heart": "game/files/heart.png",
-			"spade": "game/files/spade.png",
-			"sparkle": "game/files/sparkle.png"
+			"car": "game/files/car.png",
+			"tire": "game/files/tire.png",
+			"ki": "game/files/ki.png",
+			"sabo": "game/files/sabo.png"
 		};
 		document.querySelectorAll('.image-container div').forEach(div => {
 			div.addEventListener('dragover', event => event.preventDefault());
