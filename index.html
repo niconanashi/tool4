@@ -102,9 +102,10 @@
             font-size: 18px;
         }
         input[type="color"] {
-            width: 60px;
-            height: 60px;
-            border: none;
+            width: 90px;
+            height: 90px;
+            border: 2px solid #0078d7;
+            border-radius: 10px;
             margin: 0.5em 0;
             cursor: pointer;
             transition: border 0.3s;
@@ -114,11 +115,12 @@
         }
         input[type="color"]::-webkit-color-swatch {
             border: none;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>車メーカー4</h1>
+    <h1>車メーカー<5/h1>
     <p>このページを使って、ニコ生ゲームの投稿ファイル（game.zip）を簡単に作成できます。</p>
     <h2>使い方</h2>
     <ol>
@@ -164,20 +166,13 @@
     </div>
     <div id="warning"></div>
 
-    <p>背景、地面、文字の色を変更できます。</p>
-    <p>初期カラー</p> 　
-
-    <p>背景：<span class="color-sample" id="bgColorSample"></span></p>
-    <p>地面：<span class="color-sample" id="floorColorSample"></span></p>
-    <p>文字：<span class="color-sample" id="textColorSample"></span></p>
-
     <h2>色の変更</h2>
     <label for="bgColor">背景色:</label>
-    <input type="color" id="bgColor" name="bgColor" value="#0F5474" style="width: 90px; height: 90px;"><br>
+    <input type="color" id="bgColor" name="bgColor" value="#0F5474" style="width: 90px; height: 90px; border-radius: 10px; border: 2px solid #0078d7;"><br>
     <label for="floorColor">地面色:</label>
-    <input type="color" id="floorColor" name="floorColor" value="#977609" style="width: 90px; height: 90px;"><br>
+    <input type="color" id="floorColor" name="floorColor" value="#977609" style="width: 90px; height: 90px; border-radius: 10px; border: 2px solid #0078d7;"><br>
     <label for="textColor">文字色:</label>
-    <input type="color" id="textColor" name="textColor" value="white" style="width: 90px; height: 90px;"><br>
+    <input type="color" id="textColor" name="textColor" value="white" style="width: 90px; height: 90px; border-radius: 10px; border: 2px solid #0078d7;"><br>
 
     <button id="downloadZip">game.zip をダウンロード</button>
 <script>
