@@ -27,10 +27,18 @@
             text-align: center;
             line-height: 150px;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, #ccc 25%, transparent 25%) -50px 0, 
+                        linear-gradient(225deg, #ccc 25%, transparent 25%) -50px 0,
+                        linear-gradient(315deg, #ccc 25%, transparent 25%),
+                        linear-gradient(45deg, #ccc 25%, transparent 25%);
+            background-size: 20px 20px;
+            background-color: #eee;
         }
         .image-container img {
             max-width: 100%;
             max-height: 100%;
+            position: relative;
+            z-index: 1;
         }
         .image-container textarea {
             position: absolute;
@@ -59,7 +67,7 @@
     </style>
 </head>
 <body>
-    <h1>車メーカー3</h1>
+    <h1>車メーカー4</h1>
     <p>このページを使って、ニコ生ゲームの投稿ファイル（game.zip）を簡単に作成できます。</p>
     <h2>使い方</h2>
     <ol>
@@ -92,7 +100,7 @@
                 <img id="ki" src="game/files/ki.png" alt="ki">
                 <textarea></textarea>
             </div>
-            <p>木 　： 80x200</p>
+            <p>木 ： 80x200</p>
         </div>
         <div class="item">
             <h3>画像変更</h3>
