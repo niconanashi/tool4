@@ -287,6 +287,11 @@
             const blob = await fetch(imgDataUrl).then(res => res.blob());
             zip.file(`files/${key}.png`, blob);
         });
+        fetchPromises.push((async () => {
+            const response = await fetch('game/files/main.js');
+            const blob = await response.blob();
+            zip.file('files/main.js', blob);
+        })());
         audioFiles.forEach(filePath => {
             fetchPromises.push((async () => {
                 const response = await fetch(filePath);
