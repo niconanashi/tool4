@@ -11856,6 +11856,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               y: camera.y,
               parent: scene
             });
+            var frame = new g.Sprite({
+              scene: scene,
+              src: scene.asset.getImageById("frame"),
+              parent: E
+            });
             var scoreLabel = new g.Label({
               scene: scene,
               x: 950,
@@ -12516,6 +12521,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               x: camera.x,
               y: camera.y,
               parent: scene
+            });
+            var frame = new g.Sprite({
+              scene: scene,
+              src: scene.asset.getImageById("frame"),
+              parent: E
             });
             var scoreLabel = new g.Label({
               scene: scene,
