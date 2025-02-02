@@ -11917,7 +11917,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               bg.x = camera.x;
               bg.y = camera.y;
               bg.modified();
-              console.log(camera.x);
             }
             scene.onUpdate.add(function () {
               if (!reset) {
