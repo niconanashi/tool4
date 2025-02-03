@@ -44,6 +44,16 @@
 			},
 			"virtualPath": "image/frame.png"
 		},
+		"title": {
+			"type": "image",
+			"path": "files/title.png",
+			"width": 1280,
+			"height": 720,
+			"hint": {
+				"untainted": true
+			},
+			"virtualPath": "image/title.png"
+		},
 		"bgm": {
 			"type": "audio",
 			"path": "files/bgm",
