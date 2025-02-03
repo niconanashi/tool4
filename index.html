@@ -174,17 +174,30 @@
     </div>
     <div id="warning"></div>
     <div class="container">
-	<div class="item2">
-		<h3>装飾フレーム追加</h3>
-	<label for="decorFrame">装飾フレームを付ける： </label>
-	<input type="checkbox" id="decorFrame">
-		<p>画面サイズ1280x720の画像を固定表示できます。</p>
-	    <div class="image-container">
-	        <img id="frame" src="game/files/frame.png" alt="frame">
-	        <textarea></textarea>
-	    </div>
-	    <p>フレーム： 1280x720</p>
+		<div class="item2">
+			<h3>装飾フレーム追加</h3>
+		<label for="decorFrame">装飾フレームを付ける： </label>
+		<input type="checkbox" id="decorFrame">
+			<p>画面サイズ1280x720のフレーム画像を固定表示できます。</p>
+		    <div class="image-container">
+		        <img id="frame" src="game/files/frame.png" alt="frame">
+		        <textarea></textarea>
+		    </div>
+		    <p>フレーム： 1280x720</p>
+		</div>
 	</div>
+    <div class="container">
+		<div class="item2">
+			<h3>タイトル画面追加</h3>
+		<label for="decorTitle">タイトル画面を付ける： </label>
+		<input type="checkbox" id="decorTitle">
+			<p>画面サイズ1280x720のタイトル画像を3秒間表示できます。</p>
+		    <div class="image-container">
+		        <img id="title" src="game/files/title.png" alt="title">
+		        <textarea></textarea>
+		    </div>
+		    <p>フレーム： 1280x720</p>
+		</div>
 	</div>
     <h2>色の変更</h2>
     <label for="bgColor">背景色:</label>
@@ -195,176 +208,213 @@
     <input type="color" id="textColor" name="textColor" value="white" style="width: 90px; height: 90px; border-radius: 10px; border: 2px solid #0078d7;"><br>
     <button id="downloadZip">game.zip をダウンロード</button>
 <script>
-	const images = {
-	    "car": "game/files/car.png",
-	    "tire": "game/files/tire.png",
-	    "ki": "game/files/ki.png",
-	    "sabo": "game/files/sabo.png",
-	    "frame": "game/files/frame.png"
-	};
-	const audioFiles = [
-	    "game/files/bgm.aac",
-	    "game/files/bgm.ogg",
-	    "game/files/on.aac",
-	    "game/files/on.ogg",
-	    "game/files/off.aac",
-	    "game/files/off.ogg"
-	];
-	let colors = {
-	    "bgColor": "#0F5474",
-	    "floorColor": "#977609",
-	    "textColor": "#FFFFFF"
-	};
-	const decorFrameCheckbox = document.getElementById('decorFrame');
-	const frameImageContainer = document.getElementById('frame').parentNode;
-	decorFrameCheckbox.addEventListener('change', () => {
-	    if (decorFrameCheckbox.checked) {
-	        frameImageContainer.style.display = 'block';
-	    } else {
-	        frameImageContainer.style.display = 'none';
-	        document.getElementById('frame').src = 'game/files/frame.png';
-	        images['frame'] = 'game/files/frame.png';
-	    }
-	});
-	frameImageContainer.style.display = 'none';
-	document.querySelectorAll('.image-container').forEach(div => {
-	    div.addEventListener('dragover', event => event.preventDefault());
-	    div.addEventListener('drop', handleDrop);
-	    div.querySelector('textarea').addEventListener('paste', handlePaste);
-	});
-	async function loadGameJson() {
-	    const response = await fetch('game/game.json');
-	    return await response.json();
-	}
-	async function loadColorJson() {
-	    const response = await fetch('game/files/color.json');
-	    colors = await response.json();
-	    document.getElementById('bgColor').value = colors.bgColor;
-	    document.getElementById('floorColor').value = colors.floorColor;
-	    document.getElementById('textColor').value = colors.textColor;
-	    updateColorSamples();
-	}
-	function updateColorSamples() {
-	    const bgColorSample = document.getElementById('bgColorSample');
-	    const floorColorSample = document.getElementById('floorColorSample');
-	    const textColorSample = document.getElementById('textColorSample');
+    const images = {
+        "car": "game/files/car.png",
+        "tire": "game/files/tire.png",
+        "ki": "game/files/ki.png",
+        "sabo": "game/files/sabo.png",
+        "frame": "game/files/frame.png",
+        "title": "game/files/title.png"
+    };
+    const audioFiles = [
+        "game/files/bgm.aac",
+        "game/files/bgm.ogg",
+        "game/files/on.aac",
+        "game/files/on.ogg",
+        "game/files/off.aac",
+        "game/files/off.ogg"
+    ];
+    let colors = {
+        "bgColor": "#0F5474",
+        "floorColor": "#977609",
+        "textColor": "#FFFFFF"
+    };
+    const decorFrameCheckbox = document.getElementById('decorFrame');
+    const frameImageContainer = document.getElementById('frame').parentNode;
+    const decorTitleCheckbox = document.getElementById('decorTitle');
 
-	    if (bgColorSample) {
-	        bgColorSample.style.backgroundColor = colors.bgColor;
-	    }
-	    if (floorColorSample) {
-	        floorColorSample.style.backgroundColor = colors.floorColor;
-	    }
-	    if (textColorSample) {
-	        textColorSample.style.backgroundColor = colors.textColor;
-	    }
-	}
-	function handleDrop(event) {
-	    event.preventDefault();
-	    const file = event.dataTransfer.files[0];
-	    processFile(file, event.currentTarget.querySelector('img'));
-	}
-	function handlePaste(event) {
-	    const items = event.clipboardData.items;
-	    const target = event.currentTarget.parentNode.querySelector('img');
-	    if (target) {
-	        for (let item of items) {
-	            if (item.kind === 'file') {
-	                const file = item.getAsFile();
-	                processFile(file, target);
-	            }
-	        }
-	    }
-	}
-	function processFile(file, target) {
-	    const warningDiv = document.getElementById('warning');
-	    warningDiv.textContent = '';
-	    if (!file.type.startsWith('image/png')) {
-	        warningDiv.textContent = 'エラー：サポートされている画像形式はPNGのみです。';
-	        return;
-	    }
-	    const img = new Image();
-	    img.onload = function() {
-	        if (target.id === 'frame' && !validateFrameImage(img)) {
-	            return;
-	        }
-	        if ((target.id !== 'frame') && (img.width < 10 || img.width > 500 || img.height < 10 || img.height > 500)) {
-	            warningDiv.textContent = 'エラー：幅と高さは10ピクセル以上、500ピクセル以下である必要があります。';
-	            return;
-	        }
-	        updateImage(target, img.src);
-	    };
-	    img.onerror = function() {
-	        warningDiv.textContent = 'エラー：無効な画像ファイルです。';
-	    };
-	    const reader = new FileReader();
-	    reader.onload = function(e) {
-	        img.src = e.target.result;
-	    };
-	    reader.readAsDataURL(file);
-	}
-	function validateFrameImage(img) {
-	    const warningDiv = document.getElementById('warning');
-	    warningDiv.textContent = '';
-	    if (img.width !== 1280 || img.height !== 720) {
-	        warningDiv.textContent = 'エラー：フレーム画像のサイズは1280x720ピクセルである必要があります。';
-	        return false;
-	    }
-	    return true;
-	}
-	function updateImage(target, dataUrl) {
-	    if (!target) {
-	        const warningDiv = document.getElementById('warning');
-	        warningDiv.textContent = 'エラー：ターゲット画像要素が見つかりません。';
-	        return;
-	    }
-	    target.src = dataUrl;
-	    target.style.backgroundColor = 'white';
-	    const assetKey = target.id;
-	    images[assetKey] = dataUrl;
-	}
-	document.getElementById('downloadZip').addEventListener('click', async () => {
-	    const zip = new JSZip();
-	    const gameJson = await loadGameJson();
-	    Object.keys(images).forEach(key => {
-	        gameJson.assets[key].path = `files/${key}.png`;
-	        const imgElement = document.getElementById(key);
-	        gameJson.assets[key].width = imgElement.naturalWidth;
-	        gameJson.assets[key].height = imgElement.naturalHeight;
-	    });
-	    Object.keys(colors).forEach(key => {
-	        colors[key] = document.getElementById(key).value;
-	    });
-	    zip.file("game.json", JSON.stringify(gameJson, null, 2));
-	    zip.file("files/color.json", JSON.stringify(colors, null, 2));
-	    const fetchPromises = Object.keys(images).map(async key => {
-	        const imgDataUrl = images[key];
-	        const blob = await fetch(imgDataUrl).then(res => res.blob());
-	        zip.file(`files/${key}.png`, blob);
-	    });
-	    fetchPromises.push((async () => {
-	        const response = await fetch('game/files/main.js');
-	        const blob = await response.blob();
-	        zip.file('files/main.js', blob);
-	    })());
-	    audioFiles.forEach(filePath => {
-	        fetchPromises.push((async () => {
-	            const response = await fetch(filePath);
-	            const blob = await response.blob();
-	            zip.file(`files/${filePath.split('/').pop()}`, blob);
-	        })());
-	    });
-	    if (decorFrameCheckbox.checked) {
-	        const frameImgDataUrl = images['frame'];
-	        const frameBlob = await fetch(frameImgDataUrl).then(res => res.blob());
-	        zip.file('files/frame.png', frameBlob);
-	    }
-	    await Promise.all(fetchPromises);
-	    zip.generateAsync({ type: "blob" }).then(content => {
-	        saveAs(content, "game.zip");
-	    });
-	});
-	loadColorJson();
+    decorFrameCheckbox.addEventListener('change', () => {
+        if (decorFrameCheckbox.checked) {
+            frameImageContainer.style.display = 'block';
+        } else {
+            frameImageContainer.style.display = 'none';
+            document.getElementById('frame').src = 'game/files/frame.png';
+            images['frame'] = 'game/files/frame.png';
+        }
+    });
+    frameImageContainer.style.display = 'none';
+    document.querySelectorAll('.image-container').forEach(div => {
+        div.addEventListener('dragover', event => event.preventDefault());
+        div.addEventListener('drop', handleDrop);
+        div.querySelector('textarea').addEventListener('paste', handlePaste);
+    });
+    const titleImageContainer = document.getElementById('title').parentNode;
+    decorTitleCheckbox.addEventListener('change', () => {
+        if (decorTitleCheckbox.checked) {
+            titleImageContainer.style.display = 'block';
+            updateTotalTimeLimit(40);
+        } else {
+            titleImageContainer.style.display = 'none';
+            document.getElementById('title').src = 'game/files/title.png';
+            images['title'] = 'game/files/title.png';
+            updateTotalTimeLimit(37);
+        }
+    });
+    titleImageContainer.style.display = 'none';
+    document.querySelectorAll('.image-container').forEach(div => {
+        div.addEventListener('dragover', event => event.preventDefault());
+        div.addEventListener('drop', handleDrop);
+        div.querySelector('textarea').addEventListener('paste', handlePaste);
+    });
+
+    async function loadGameJson() {
+        const response = await fetch('game/game.json');
+        return await response.json();
+    }
+    async function loadColorJson() {
+        const response = await fetch('game/files/color.json');
+        colors = await response.json();
+        document.getElementById('bgColor').value = colors.bgColor;
+        document.getElementById('floorColor').value = colors.floorColor;
+        document.getElementById('textColor').value = colors.textColor;
+        updateColorSamples();
+    }
+    function updateColorSamples() {
+        const bgColorSample = document.getElementById('bgColorSample');
+        const floorColorSample = document.getElementById('floorColorSample');
+        const textColorSample = document.getElementById('textColorSample');
+
+        if (bgColorSample) {
+            bgColorSample.style.backgroundColor = colors.bgColor;
+        }
+        if (floorColorSample) {
+            floorColorSample.style.backgroundColor = colors.floorColor;
+        }
+        if (textColorSample) {
+            textColorSample.style.backgroundColor = colors.textColor;
+        }
+    }
+    function handleDrop(event) {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        processFile(file, event.currentTarget.querySelector('img'));
+    }
+    function handlePaste(event) {
+        const items = event.clipboardData.items;
+        const target = event.currentTarget.parentNode.querySelector('img');
+        if (target) {
+            for (let item of items) {
+                if (item.kind === 'file') {
+                    const file = item.getAsFile();
+                    processFile(file, target);
+                }
+            }
+        }
+    }
+    function processFile(file, target) {
+        const warningDiv = document.getElementById('warning');
+        warningDiv.textContent = '';
+        if (!file.type.startsWith('image/png')) {
+            warningDiv.textContent = 'エラー：サポートされている画像形式はPNGのみです。';
+            return;
+        }
+        const img = new Image();
+        img.onload = function() {
+            if ((target.id === 'frame' || target.id === 'title') && !validateFrameImage(img)) {
+                return;
+            }
+            if ((target.id !== 'frame' && target.id !== 'title') && (img.width < 10 || img.width > 500 || img.height < 10 || img.height > 500)) {
+                warningDiv.textContent = 'エラー：幅と高さは10ピクセル以上、500ピクセル以下である必要があります。';
+                return;
+            }
+            updateImage(target, img.src);
+        };
+        img.onerror = function() {
+            warningDiv.textContent = 'エラー：無効な画像ファイルです。';
+        };
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+    function validateFrameImage(img) {
+        const warningDiv = document.getElementById('warning');
+        warningDiv.textContent = '';
+        if (img.width !== 1280 || img.height !== 720) {
+            warningDiv.textContent = 'エラー：フレーム画像のサイズは1280x720ピクセルである必要があります。';
+            return false;
+        }
+        return true;
+    }
+    function validateTitleImage(img) {
+        const warningDiv = document.getElementById('warning');
+        warningDiv.textContent = '';
+        if (img.width !== 1280 || img.height !== 720) {
+            warningDiv.textContent = 'エラー：タイトル画像のサイズは1280x720ピクセルである必要があります。';
+            return false;
+        }
+        return true;
+    }
+    function updateImage(target, dataUrl) {
+        if (!target) {
+            const warningDiv = document.getElementById('warning');
+            warningDiv.textContent = 'エラー：ターゲット画像要素が見つかりません。';
+            return;
+        }
+        target.src = dataUrl;
+        target.style.backgroundColor = 'white';
+        const assetKey = target.id;
+        images[assetKey] = dataUrl;
+    }
+    document.getElementById('downloadZip').addEventListener('click', async () => {
+        const zip = new JSZip();
+        let gameJson = await loadGameJson();
+        Object.keys(images).forEach(key => {
+            gameJson.assets[key].path = `files/${key}.png`;
+            const imgElement = document.getElementById(key);
+            gameJson.assets[key].width = imgElement.naturalWidth;
+            gameJson.assets[key].height = imgElement.naturalHeight;
+        });
+        Object.keys(colors).forEach(key => {
+            colors[key] = document.getElementById(key).value;
+        });
+        gameJson.environment.nicolive.preferredSessionParameters.totalTimeLimit = decorTitleCheckbox.checked ? 40 : 37; // ここで更新
+        zip.file("game.json", JSON.stringify(gameJson, null, 2));
+        zip.file("files/color.json", JSON.stringify(colors, null, 2));
+        const fetchPromises = Object.keys(images).map(async key => {
+            const imgDataUrl = images[key];
+            const blob = await fetch(imgDataUrl).then(res => res.blob());
+            zip.file(`files/${key}.png`, blob);
+        });
+        fetchPromises.push((async () => {
+            const response = await fetch('game/files/main.js');
+            const blob = await response.blob();
+            zip.file('files/main.js', blob);
+        })());
+        audioFiles.forEach(filePath => {
+            fetchPromises.push((async () => {
+                const response = await fetch(filePath);
+                const blob = await response.blob();
+                zip.file(`files/${filePath.split('/').pop()}`, blob);
+            })());
+        });
+        if (decorFrameCheckbox.checked) {
+            const frameImgDataUrl = images['frame'];
+            const frameBlob = await fetch(frameImgDataUrl).then(res => res.blob());
+            zip.file('files/frame.png', frameBlob);
+        }
+        if (decorTitleCheckbox.checked) {
+            const titleImgDataUrl = images['title'];
+            const titleBlob = await fetch(titleImgDataUrl).then(res => res.blob());
+            zip.file('files/title.png', titleBlob);
+        }
+        await Promise.all(fetchPromises);
+        zip.generateAsync({ type: "blob" }).then(content => {
+            saveAs(content, "game.zip");
+        });
+    });
+    loadColorJson();
 </script>
 </body>
 </html>
