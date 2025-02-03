@@ -101,6 +101,10 @@
             color: red;
             margin-top: 10px;
         }
+        #warning2 {
+            color: red;
+            margin-top: 5px;
+        }
         h1, h2, h3 {
             color: #0078d7;
         }
@@ -186,6 +190,7 @@
 		    <p>フレーム： 1280x720</p>
 		</div>
 	</div>
+    <div id="warning2"></div>
     <div class="container">
 		<div class="item2">
 			<h3>タイトル画面追加</h3>
@@ -351,7 +356,7 @@
         return true;
     }
     function validateTitleImage(img) {
-        const warningDiv = document.getElementById('warning');
+        const warningDiv = document.getElementById('warning2');
         warningDiv.textContent = '';
         if (img.width !== 1280 || img.height !== 720) {
             warningDiv.textContent = 'エラー：タイトル画像のサイズは1280x720ピクセルである必要があります。';
