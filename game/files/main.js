@@ -11302,7 +11302,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       g.game.audio.music.volume = 0.2;
       function main(param) {
         var random = param.random;
+        var titleTime = 0;
         var gameTime = 30;
+        var isTitle = true;
+        if (param.sessionParameter.totalTimeLimit > 37) {
+          //game.jsonのtotalTimeLimitは タイトルなし：37、タイトルあり：40　で書き込まれる
+          titleTime = 3;
+          gameTime = param.sessionParameter.totalTimeLimit - titleTime - 7; //totalTimeLimit = gameTime + titleTime + 読み込み時間 7秒
+        }
         var randomGenerate = random.generate();
         var randomGenerate2 = [];
         for (var i = 0; i < 16; i++) {
@@ -11861,6 +11868,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               src: scene.asset.getImageById("frame"),
               parent: E
             });
+            if (isTitle && titleTime > 0) {
+              var title = new g.Sprite({
+                scene: scene,
+                src: scene.asset.getImageById("title"),
+                parent: E
+              });
+              scene.setTimeout(function () {
+                title.destroy();
+                isTitle = false;
+              }, titleTime * 1000);
+            } else {
+              isTitle = false;
+            }
             var scoreLabel = new g.Label({
               scene: scene,
               x: 950,
@@ -11890,20 +11910,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               touchable: true,
               parent: E
             });
-            var black = new g.FilledRect({
-              scene: scene,
-              cssColor: "black",
-              width: 1280,
-              height: 720,
-              opacity: 1,
-              parent: E
-            });
             resetLabel.onPointDown.add(function () {
-              if (time > 0) {
+              if (time > 0 && !isTitle) {
                 reset = true;
                 box2d.destroy();
-                camera.x = -200; //-225;
-                camera.y = -105;
+                camera.x = -200;
+                camera.y = -130; //105
                 g.game.replaceScene(createSceneA2());
               }
             });
@@ -11919,9 +11931,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               bg.modified();
             }
             scene.onUpdate.add(function () {
-              if (!reset) {
+              if (!reset && !isTitle) {
                 if (!start) {
-                  black.destroy();
                   start = true;
                 }
                 box2d.step(1 / g.game.fps);
@@ -12526,6 +12537,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               src: scene.asset.getImageById("frame"),
               parent: E
             });
+            if (isTitle && titleTime > 0) {
+              var title = new g.Sprite({
+                scene: scene,
+                src: scene.asset.getImageById("title"),
+                parent: E
+              });
+              scene.setTimeout(function () {
+                title.destroy();
+                isTitle = false;
+              }, titleTime * 1000);
+            } else {
+              isTitle = false;
+            }
             var scoreLabel = new g.Label({
               scene: scene,
               x: 950,
@@ -12555,16 +12579,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               touchable: true,
               parent: E
             });
-            var black = new g.FilledRect({
-              scene: scene,
-              cssColor: "black",
-              width: 1280,
-              height: 720,
-              opacity: 1,
-              parent: E
-            });
             resetLabel.onPointDown.add(function () {
-              if (time > 0) {
+              if (time > 0 && !isTitle) {
                 reset = true;
                 box2d.destroy();
                 camera.x = -200; //-180
@@ -12586,9 +12602,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var trans1 = 0;
             var trans2 = 0;
             scene.onUpdate.add(function () {
-              if (!reset) {
+              if (!reset && !isTitle) {
                 if (!start) {
-                  black.destroy();
                   start = true;
                 }
                 box2d.step(1 / g.game.fps);
