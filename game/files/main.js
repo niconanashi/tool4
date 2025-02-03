@@ -12129,8 +12129,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var sabo1 = new g.Sprite({
               scene: scene,
               src: scene.asset.getImageById("sabo"),
-              x: -100,
+              x: 0,
               y: 400,
+              anchorX: 1,
               anchorY: 1,
               parent: scene
             });
@@ -12147,9 +12148,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var sabo2 = new g.Sprite({
               scene: scene,
               src: scene.asset.getImageById("sabo"),
-              x: -900,
+              x: -1000,
               y: 410,
-              anchorX: 1,
               anchorY: 1,
               parent: scene
             });
