@@ -212,6 +212,55 @@
     <label for="textColor">文字色:</label>
     <input type="color" id="textColor" name="textColor" value="white" style="width: 90px; height: 90px; border-radius: 10px; border: 2px solid #0078d7;"><br>
     <button id="downloadZip">game.zip をダウンロード</button>
+    <div class="container" style="margin-top: 100px;">
+	    <pre>
+		音声ファイルや時間を変更する場合
+
+
+
+・投稿ファイルの編集方法
+ダウンロードしたファイル右クリックし[すべて展開]を選択し解凍します。
+編集後に
+filesフォルダとgame.jsonを同時選択した状態で右クリックし
+[送る][圧縮(zip)]を選択し投稿用のzipファイルを作ります。
+
+・音声ファイルの変更
+1つの音に対し同じファイル名の.aacと.oggの2種類の音声ファイルが必要です。
+mp3などの音声をオンラインの変換サイトを探し変換するのが簡単です。
+filesフォルダ内
+bgm：ループ再生させる音
+on：アクセルオンの音
+off：アクセルオフの音
+
+・音量の変更
+filesフォルダ内のmain.jsをメモ帳などで開きます。
+最下部付近
+g.game.audio.music.volume = 0.2;//bgmの音量（ 0～1の範囲 ）
+g.game.audio.sound.volume = 0.4;//効果音の音量（ 0～1の範囲 ）
+この値を 0～1 の範囲で変更し上書き保存します。
+
+・ゲーム時間の変更
+game.jsonをメモ帳などで開きます。
+最下部から少し上
+"totalTimeLimit": 37
+この値を変更し上書き保存します。（ 0～200の範囲 ）
+これはゲーム起動から集計までの時間です。
+読み込み時間 7秒 と タイトル表示時間 3秒 と ゲーム時間 30秒 を足した値。
+初期状態は、タイトルなしの場合 37、タイトルありの場合 40 で書き込まれ
+ゲーム時間は30秒です。
+
+・タイトル表示時間の変更
+files内のmain.jsをメモ帳などで開きます。
+最下部付近
+titleTime=3;//タイトルなしにする場合は0
+この値を変更し上書き保存します。
+
+・ゲーム内の時間の変更
+ゲーム内の時間はtotalTimeLimitとtitleTimeから自動で決まります。
+( totalTimeLimit - titleTime - 7 )
+	</pre>
+</div>
+<script>
 <script>
     const images = {
         "car": "game/files/car.png",
