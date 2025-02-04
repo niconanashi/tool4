@@ -11298,18 +11298,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         y: -105
       }); //x:-225,y:-105
       g.game.focusingCamera = camera;
-      g.game.audio.sound.volume = 0.4;
-      g.game.audio.music.volume = 0.2;
       function main(param) {
         var random = param.random;
-        var titleTime = 0;
-        var gameTime = 30;
-        var isTitle = true;
-        if (param.sessionParameter.totalTimeLimit > 37) {
-          //game.jsonのtotalTimeLimitは タイトルなし：37、タイトルあり：40　で書き込まれる
-          titleTime = 3;
-          gameTime = param.sessionParameter.totalTimeLimit - titleTime - 7; //totalTimeLimit = gameTime + titleTime + 読み込み時間 7秒
-        }
         var randomGenerate = random.generate();
         var randomGenerate2 = [];
         for (var i = 0; i < 16; i++) {
@@ -11376,7 +11366,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             objects.push(floor);
             var amplitude = 10 + randomGenerate * 30;
             var frequency = 0.1 + randomGenerate * 0.2;
-            var totalSegments = 500;
+            var totalSegments = 500; //メモリ、計算負荷が増えるため1500くらいが限度（増やすには遠い地面の削除か使い回しが必要）
             var randomCount = 0;
             var randomCount2 = 9;
             var y = 0;
@@ -12049,7 +12039,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             objects.push(floor);
             var amplitude = 10 + randomGenerate * 20;
             var frequency = 0.1 + randomGenerate * 0.2;
-            var totalSegments = 700;
+            var totalSegments = 700; //メモリ、計算負荷が増えるため1500くらいが限度（増やすには遠い地面の削除か使い回しが必要）
             var randomCount = 0;
             var randomCount2 = 9;
             var y = 0;
@@ -12670,6 +12660,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           fontFamily: "sans-serif",
           size: 48
         });
+        var titleTime = 0;
+        var gameTime = 30;
+        var isTitle = true;
+        //game.jsonのtotalTimeLimit初期値は タイトルなし：37、タイトルあり：40
+        //時間変更時はgame.jsonのtotalTimeLimitが gameTime + titleTime + 読み込み時間 7秒になるように変更が必要
+        if (param.sessionParameter.totalTimeLimit > 37) {
+          titleTime = 3; //タイトルなしにする場合は0
+          gameTime = param.sessionParameter.totalTimeLimit - titleTime - 7; //ゲームタイムはtotalTimeLimitとtitleTimeから自動で決まる
+        }
+        g.game.audio.music.volume = 0.2; //bgmの音量（ 0～1の範囲 ）
+        g.game.audio.sound.volume = 0.4; //効果音の音量（ 0～1の範囲 ）
         var map = random.get(1, 40);
         if (map >= 10) {
           g.game.pushScene(createSceneA2()); //山コース
