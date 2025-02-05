@@ -101,7 +101,7 @@
             color: red;
             margin-top: 10px;
         }
-        #warning2 {
+        #warning2, #warning3 {
             color: red;
             margin-top: 5px;
         }
@@ -204,6 +204,20 @@
 		    <p>タイトル： 1280x720</p>
 		</div>
 	</div>
+    <div id="warning3"></div>
+    <div class="container">
+		<div class="item2">
+			<h3>背景画像追加</h3>
+		<label for="decorBg2">背景に画像を付ける： </label>
+		<input type="checkbox" id="decorBg2">
+			<p>画面サイズ1280x720の背景に遠景の画像を重ねて表示できます。</p>
+		    <div class="image-container">
+		        <img id="bg2" src="game/files/bg2.png" alt="bg2">
+		        <textarea></textarea>
+		    </div>
+		    <p>背景： 1280x720</p>
+		</div>
+	</div>
     <h2>色の変更</h2>
     <label for="bgColor">背景色:</label>
     <input type="color" id="bgColor" name="bgColor" value="#0F5474" style="width: 90px; height: 90px; border-radius: 10px; border: 2px solid #0078d7;"><br>
@@ -267,7 +281,8 @@ titleTime = 3; //タイトルなしにする場合は0
         "ki": "game/files/ki.png",
         "sabo": "game/files/sabo.png",
         "frame": "game/files/frame.png",
-        "title": "game/files/title.png"
+        "title": "game/files/title.png",
+        "bg2": "game/files/bg2.png"
     };
     const audioFiles = [
         "game/files/bgm.aac",
@@ -285,7 +300,9 @@ titleTime = 3; //タイトルなしにする場合は0
     const decorFrameCheckbox = document.getElementById('decorFrame');
     const frameImageContainer = document.getElementById('frame').parentNode;
     const decorTitleCheckbox = document.getElementById('decorTitle');
-
+    const titleImageContainer = document.getElementById('title').parentNode;
+    const decorBg2Checkbox = document.getElementById('decorBg2');
+    const bg2ImageContainer = document.getElementById('bg2').parentNode;
     decorFrameCheckbox.addEventListener('change', () => {
         if (decorFrameCheckbox.checked) {
             frameImageContainer.style.display = 'block';
@@ -301,7 +318,6 @@ titleTime = 3; //タイトルなしにする場合は0
         div.addEventListener('drop', handleDrop);
         div.querySelector('textarea').addEventListener('paste', handlePaste);
     });
-    const titleImageContainer = document.getElementById('title').parentNode;
     decorTitleCheckbox.addEventListener('change', () => {
         if (decorTitleCheckbox.checked) {
             titleImageContainer.style.display = 'block';
@@ -314,6 +330,21 @@ titleTime = 3; //タイトルなしにする場合は0
         }
     });
     titleImageContainer.style.display = 'none';
+    document.querySelectorAll('.image-container').forEach(div => {
+        div.addEventListener('dragover', event => event.preventDefault());
+        div.addEventListener('drop', handleDrop);
+        div.querySelector('textarea').addEventListener('paste', handlePaste);
+    });
+    decorBg2Checkbox.addEventListener('change', () => {
+        if (decorBg2Checkbox.checked) {
+            bg2ImageContainer.style.display = 'block';
+        } else {
+            bg2ImageContainer.style.display = 'none';
+            document.getElementById('bg2').src = 'game/files/bg2.png';
+            images['bg2'] = 'game/files/bg2.png';
+        }
+    });
+    bg2ImageContainer.style.display = 'none';
     document.querySelectorAll('.image-container').forEach(div => {
         div.addEventListener('dragover', event => event.preventDefault());
         div.addEventListener('drop', handleDrop);
@@ -365,8 +396,10 @@ titleTime = 3; //タイトルなしにする場合は0
         }
     }
     function processFile(file, target) {
-        const warningDiv = document.getElementById('warning');
-        warningDiv.textContent = '';
+        const warningDivs = document.querySelectorAll('#warning, #warning2, #warning3');
+	    warningDivs.forEach(warningDiv => {
+	        warningDiv.textContent = '';
+	    });
         if (!file.type.startsWith('image/png')) {
             warningDiv.textContent = 'エラー：サポートされている画像形式はPNGのみです。';
             return;
@@ -379,7 +412,10 @@ titleTime = 3; //タイトルなしにする場合は0
             if (target.id === 'title' && !validateTitleImage(img)) {
                 return;
             }
-            if ((target.id !== 'frame' && target.id !== 'title') && (img.width < 10 || img.width > 500 || img.height < 10 || img.height > 500)) {
+            if (target.id === 'bg2' && !validateBg2Image(img)) {
+                return;
+            }
+            if ((target.id !== 'frame' && target.id !== 'title' && target.id !== 'bg2') && (img.width < 10 || img.width > 500 || img.height < 10 || img.height > 500)) {
                 warningDiv.textContent = 'エラー：幅と高さは10ピクセル以上、500ピクセル以下である必要があります。';
                 return;
             }
@@ -408,6 +444,15 @@ titleTime = 3; //タイトルなしにする場合は0
         warningDiv.textContent = '';
         if (img.width !== 1280 || img.height !== 720) {
             warningDiv.textContent = 'エラー：タイトル画像のサイズは1280x720ピクセルである必要があります。';
+            return false;
+        }
+        return true;
+    }
+    function validateBg2Image(img) {
+        const warningDiv = document.getElementById('warning3');
+        warningDiv.textContent = '';
+        if (img.width !== 1280 || img.height !== 720) {
+            warningDiv.textContent = 'エラー：背景画像のサイズは1280x720ピクセルである必要があります。';
             return false;
         }
         return true;
@@ -464,6 +509,11 @@ titleTime = 3; //タイトルなしにする場合は0
             const titleImgDataUrl = images['title'];
             const titleBlob = await fetch(titleImgDataUrl).then(res => res.blob());
             zip.file('files/title.png', titleBlob);
+        }
+        if (decorBg2Checkbox.checked) {
+            const bg2ImgDataUrl = images['bg2'];
+            const bg2Blob = await fetch(bg2ImgDataUrl).then(res => res.blob());
+            zip.file('files/bg2.png', bg2Blob);
         }
         await Promise.all(fetchPromises);
         zip.generateAsync({ type: "blob" }).then(content => {
