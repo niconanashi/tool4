@@ -53,6 +53,16 @@
 				"untainted": true
 			},
 			"virtualPath": "image/title.png"
+		},		
+		"bg2": {
+			"type": "image",
+			"path": "files/bg2.png",
+			"width": 1280,
+			"height": 720,
+			"hint": {
+				"untainted": true
+			},
+			"virtualPath": "image/bg2.png"
 		},
 		"bgm": {
 			"type": "audio",
