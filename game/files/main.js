@@ -11349,6 +11349,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               opacity: 1,
               parent: scene
             });
+            var bg2 = new g.Sprite({
+              scene: scene,
+              src: scene.asset.getImageById("bg2"),
+              parent: bg
+            });
             var count = 0;
             var objects = [];
             var angle = 0;
@@ -11968,7 +11973,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             var rectAngle = 0;
             scene.setInterval(function () {
-              if (rect1.x < 29000 && rect1.y < 3000) {
+              if (rect1.x < floorEnd.x && rect1.y < 3000) {
                 if ((rect1.angle < -1440 || rect1.angle > 1440) && rectAngle < 1) {
                   box2d.world.DestroyJoint(joint1);
                   rectAngle = 1;
@@ -12021,6 +12026,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               height: 720,
               opacity: 1,
               parent: scene
+            });
+            var bg2 = new g.Sprite({
+              scene: scene,
+              src: scene.asset.getImageById("bg2"),
+              parent: bg
             });
             var count = 0;
             var objects = [];
@@ -12641,7 +12651,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             var rectAngle = 0;
             scene.setInterval(function () {
-              if (rect1.x < 29000 && rect1.y < 3000) {
+              if (rect1.x < floorEnd.x && rect1.y < 3000) {
                 if ((rect1.angle < -1440 || rect1.angle > 1440) && rectAngle < 1) {
                   box2d.world.DestroyJoint(joint1);
                   rectAngle = 1;
