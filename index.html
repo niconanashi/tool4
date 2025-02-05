@@ -396,10 +396,8 @@ titleTime = 3; //タイトルなしにする場合は0
         }
     }
     function processFile(file, target) {
-        const warningDivs = document.querySelectorAll('#warning, #warning2, #warning3');
-	    warningDivs.forEach(warningDiv => {
-	        warningDiv.textContent = '';
-	    });
+        const warningDiv = document.getElementById('warning');
+        warningDiv.textContent = '';
         if (!file.type.startsWith('image/png')) {
             warningDiv.textContent = 'エラー：サポートされている画像形式はPNGのみです。';
             return;
