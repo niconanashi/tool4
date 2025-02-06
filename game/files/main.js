@@ -11315,7 +11315,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             assetPaths: ["/**/*"]
           });
           var box2d = new b2.Box2D({
-            gravity: [0, 9.8],
+            gravity: [0, gravity],
             scale: 50,
             sleep: false
           });
@@ -11993,7 +11993,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             assetPaths: ["/**/*"]
           });
           var box2d = new b2.Box2D({
-            gravity: [0, 9.8],
+            gravity: [0, gravity],
             scale: 50,
             sleep: false
           });
@@ -12237,7 +12237,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                 maskBits: 2
               }
             });
-            var scale = 1.2;
             box2d.createBody(objects[totalSegments], staticDef, floorDef);
             var carColor = "#9057FF";
             var rect1 = new g.Sprite({
@@ -12673,6 +12672,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var titleTime = 0;
         var gameTime = 30;
         var isTitle = true;
+        var gravity = 9.8; //物理エンジン世界の重力
         //game.jsonのtotalTimeLimit初期値は タイトルなし：37、タイトルあり：40
         //時間変更時はgame.jsonのtotalTimeLimitが gameTime + titleTime + 読み込み時間 7秒になるように変更が必要
         if (param.sessionParameter.totalTimeLimit > 37) {
