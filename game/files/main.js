@@ -11879,7 +11879,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var scoreLabel = new g.Label({
               scene: scene,
               x: 950,
-              text: "SCORE: " + g.game.vars.gameState.score,
+              text: scoreText + g.game.vars.gameState.score,
               font: font,
               fontSize: font.size,
               textColor: textColor,
@@ -11888,7 +11888,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var timeLabel = new g.Label({
               scene: scene,
               x: 50,
-              text: "TIME: " + time,
+              text: timeText + time,
               font: font,
               fontSize: font.size,
               textColor: textColor,
@@ -11898,7 +11898,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               scene: scene,
               x: 25,
               y: 100,
-              text: "リセット",
+              text: resetText,
               font: font,
               fontSize: 24,
               textColor: textColor,
@@ -11958,13 +11958,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                   time = Math.ceil(gameTime);
                   if (time < labelTime) {
                     labelTime = time;
-                    timeLabel.text = "TIME: " + time;
+                    timeLabel.text = timeText + time;
                     timeLabel.invalidate();
                   }
                   score = Math.ceil(rect1.x / 20);
                   if (g.game.vars.gameState.score < score) {
                     g.game.vars.gameState.score = score;
-                    scoreLabel.text = "SCORE: " + g.game.vars.gameState.score;
+                    scoreLabel.text = scoreText + g.game.vars.gameState.score;
                     scoreLabel.invalidate();
                   }
                   cameraXY();
@@ -12552,7 +12552,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var scoreLabel = new g.Label({
               scene: scene,
               x: 950,
-              text: "SCORE: " + g.game.vars.gameState.score,
+              text: scoreText + g.game.vars.gameState.score,
               font: font,
               fontSize: font.size,
               textColor: textColor,
@@ -12561,7 +12561,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var timeLabel = new g.Label({
               scene: scene,
               x: 50,
-              text: "TIME: " + time,
+              text: timeText + time,
               font: font,
               fontSize: font.size,
               textColor: textColor,
@@ -12571,7 +12571,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               scene: scene,
               x: 25,
               y: 100,
-              text: "リセット",
+              text: resetText,
               font: font,
               fontSize: 24,
               textColor: textColor,
@@ -12635,13 +12635,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                   time = Math.ceil(gameTime);
                   if (time < labelTime) {
                     labelTime = time;
-                    timeLabel.text = "TIME: " + time;
+                    timeLabel.text = timeText + time;
                     timeLabel.invalidate();
                   }
                   score = Math.ceil(rect1.x / 20);
                   if (g.game.vars.gameState.score < score) {
                     g.game.vars.gameState.score = score;
-                    scoreLabel.text = "SCORE: " + g.game.vars.gameState.score;
+                    scoreLabel.text = scoreText + g.game.vars.gameState.score;
                     scoreLabel.invalidate();
                   }
                   cameraXY();
@@ -12673,6 +12673,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var gameTime = 30;
         var isTitle = true;
         var gravity = 9.8; //物理エンジン世界の重力
+        var scoreText = "SCORE: "; //スコアラベルの文字
+        var timeText = "TIME: "; //タイムラベルの文字
+        var resetText = "リセット"; //リセットボタンの文字
         //game.jsonのtotalTimeLimit初期値は タイトルなし：37、タイトルあり：40
         //時間変更時はgame.jsonのtotalTimeLimitが gameTime + titleTime + 読み込み時間 7秒になるように変更が必要
         if (param.sessionParameter.totalTimeLimit > 37) {
@@ -12681,8 +12684,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         g.game.audio.music.volume = 0.2; //bgmの音量（ 0～1の範囲 ）
         g.game.audio.sound.volume = 0.4; //効果音の音量（ 0～1の範囲 ）
-        var map = random.get(1, 40);
-        if (map >= 10) {
+        var map = random.get(1, 100); // 77/100の確率で山コースのシーンに行く
+        if (map <= 77) {
           g.game.pushScene(createSceneA2()); //山コース
         } else {
           g.game.pushScene(createSceneA3()); //砂漠コース
