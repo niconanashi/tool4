@@ -12675,7 +12675,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var gravity = 9.8; //物理エンジン世界の重力
         var scoreText = "SCORE: "; //スコアラベルの文字
         var timeText = "TIME: "; //タイムラベルの文字
-        var resetText = "リセット"; //リセットボタンの文字
+        var resetText = "リセット"; //リセットボタンの文字	
         //game.jsonのtotalTimeLimit初期値は タイトルなし：37、タイトルあり：40
         //時間変更時はgame.jsonのtotalTimeLimitが gameTime + titleTime + 読み込み時間 7秒になるように変更が必要
         if (param.sessionParameter.totalTimeLimit > 37) {
@@ -12684,6 +12684,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         g.game.audio.music.volume = 0.2; //bgmの音量（ 0～1の範囲 ）
         g.game.audio.sound.volume = 0.4; //効果音の音量（ 0～1の範囲 ）
+        //効果音の再生が途切れる場合：game.json内の音声ファイルの durationの値（ 再生時間のミリ秒 ）を調整
         var map = random.get(1, 100); // 77/100の確率で山コースのシーンに行く
         if (map <= 77) {
           g.game.pushScene(createSceneA2()); //山コース
