@@ -11945,7 +11945,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                 }
                 if (fo) {
                   seTime++;
-                  if (seTime > 180) {
+                  if (seTime > seInterval * 0.06) {
+                    //180=3000*0.06
                     seTime = 0;
                     scene.asset.getAudioById("on").stop();
                     scene.asset.getAudioById("on").play();
@@ -12622,7 +12623,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                 joint2.SetMotorSpeed(-0.1 * trans2 * 50);
                 if (fo) {
                   seTime++;
-                  if (seTime > 180) {
+                  if (seTime > seInterval * 0.06) {
+                    //180=3000*0.06
                     seTime = 0;
                     scene.asset.getAudioById("on").stop();
                     scene.asset.getAudioById("on").play();
@@ -12684,6 +12686,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         g.game.audio.music.volume = 0.2; //bgmの音量（ 0～1の範囲 ）
         g.game.audio.sound.volume = 0.4; //効果音の音量（ 0～1の範囲 ）
+        var seInterval = 3000; //アクセルオンをループ再生するときの間隔（ 再生時間のミリ秒 ）
         //効果音の再生が途切れる場合：game.json内の音声ファイルの durationの値（ 再生時間のミリ秒 ）を調整
         var map = random.get(1, 100); // 77/100の確率で山コースのシーンに行く
         if (map <= 77) {
