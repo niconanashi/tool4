@@ -11584,7 +11584,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             var r = new g.E({
               scene: scene,
-              x: 200 + scene.asset.getImageById("tire").width * 0.6,
+              x: 200 + scene.asset.getImageById("tire").width * 0.6 + rearTireOffsetX,
               y: rect1.y,
               anchorX: 0.5,
               anchorY: 0.5,
@@ -11594,7 +11594,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             var f = new g.E({
               scene: scene,
-              x: 200 + rect1.width - scene.asset.getImageById("tire").width * 0.6,
+              x: 200 + rect1.width - scene.asset.getImageById("tire").width * 0.6 + frontTireOffsetX,
               y: rect1.y,
               anchorX: 0.5,
               anchorY: 0.5,
@@ -12281,7 +12281,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             var r = new g.E({
               scene: scene,
-              x: 200 + scene.asset.getImageById("tire").width * 0.6,
+              x: 200 + scene.asset.getImageById("tire").width * 0.6 + rearTireOffsetX,
               y: rect1.y,
               anchorX: 0.5,
               anchorY: 0.5,
@@ -12291,7 +12291,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             var f = new g.E({
               scene: scene,
-              x: 200 + rect1.width - scene.asset.getImageById("tire").width * 0.6,
+              x: 200 + rect1.width - scene.asset.getImageById("tire").width * 0.6 + frontTireOffsetX,
               y: rect1.y,
               anchorX: 0.5,
               anchorY: 0.5,
@@ -12675,6 +12675,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var gameTime = 30;
         var isTitle = true;
         var gravity = 9.8; //物理エンジン世界の重力
+        var frontTireOffsetX = 0; //前輪のx座標調整
+        var rearTireOffsetX = 0; //後輪のx座標調整
         var scoreText = "SCORE: "; //スコアラベルの文字
         var timeText = "TIME: "; //タイムラベルの文字
         var resetText = "リセット"; //リセットボタンの文字	
