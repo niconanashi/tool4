@@ -11333,6 +11333,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var fo = false;
           var seTime = 0;
           var hit = false;
+          weight = weight < 0.1 ? 0.1 : weight;
           scene.onLoad.add(function () {
             var colors = scene.asset.getJSONContent("/text/color.json");
             var bgColor = colors.bgColor;
@@ -11437,7 +11438,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               objects.push(floor);
               var floorDef = box2d.createFixtureDef({
                 density: 1.0,
-                friction: 1.0,
+                friction: tireFriction,
                 restitution: 0,
                 shape: box2d.createRectShape(floor.width, floor.height),
                 // 地面エンティティを四角に設定
@@ -11483,7 +11484,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             //objects.push(floorTop);
             var floorTopDef = box2d.createFixtureDef({
               density: 1.0,
-              friction: 1.0,
+              friction: tireFriction,
               restitution: 0,
               shape: box2d.createRectShape(floorTop.width, floorTop.height),
               // 地面エンティティを四角に設定
@@ -11521,7 +11522,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             objects.push(floorEnd);
             var floorEndDef = box2d.createFixtureDef({
               density: 1.0,
-              friction: 1.0,
+              friction: tireFriction,
               restitution: 0,
               shape: box2d.createRectShape(floorEnd.width, floorEnd.height),
               // 地面エンティティを四角に設定
@@ -11533,7 +11534,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             box2d.createBody(floorEnd, staticDef, floorEndDef);
             var floorEndDef = box2d.createFixtureDef({
               density: 1.0,
-              friction: 1.0,
+              friction: tireFriction,
               restitution: 0,
               shape: box2d.createRectShape(floor.width, floor.height),
               // 地面エンティティを四角に設定
@@ -11645,10 +11646,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }));
             // rect1
             var a = box2d.createBody(rect1, dynamicDef, box2d.createFixtureDef({
-              density: 1.5,
-              //密度//1
+              density: weight,
+              //密度1.5
               friction: 0.5,
-              //摩擦0.5
+              //摩擦
               restitution: 0,
               // 反発係数
               shape: box2d.createRectShape(rect1.width * carBlockWidth, rect1.height * carBlockHeight),
@@ -11659,8 +11660,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }));
             // rect2
             var a2 = box2d.createBody(rect2, dynamicDef, box2d.createFixtureDef({
-              density: 3,
-              //密度//0.8
+              density: weight,
+              //密度//3
               friction: 0.5,
               //摩擦
               restitution: 0.5,
@@ -11709,7 +11710,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var b = box2d.createBody(tire1, dynamicDef, box2d.createFixtureDef({
               density: 1.5,
               //密度
-              friction: 0.9,
+              friction: tireFriction,
               //摩擦//0.75
               restitution: 0,
               // 反発係数//0.2
@@ -11723,7 +11724,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var c = box2d.createBody(tire2, dynamicDef, box2d.createFixtureDef({
               density: 1.5,
               //密度
-              friction: 0.9,
+              friction: tireFriction,
               //摩擦//0.75
               restitution: 0,
               // 反発係数//0.2
@@ -11768,6 +11769,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             def5.enableMotor = true;
             var joint4 = box2d.world.CreateJoint(def4);
             var joint5 = box2d.world.CreateJoint(def5);
+            if (diffLock) {
+              var def6 = new b2.Box2DWeb.Dynamics.Joints.b2GearJointDef();
+              def6.bodyA = joint4.GetBodyA();
+              def6.bodyB = joint5.GetBodyB();
+              def6.joint1 = joint4;
+              def6.joint2 = joint5;
+              def6.ratio = -1;
+              var gearJoint = box2d.world.CreateJoint(def6);
+            }
             var L = false;
             var R = false;
             scene.onPointDownCapture.add(function (e) {
@@ -11810,9 +11820,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               }
             });
             function on() {
-              joint4.SetMaxMotorTorque(22);
+              joint4.SetMaxMotorTorque(22 * torque);
               joint4.SetMotorSpeed(600);
-              joint5.SetMaxMotorTorque(22);
+              joint5.SetMaxMotorTorque(22 * torque);
               joint5.SetMotorSpeed(600);
               lamp2.hide();
               scene.asset.getAudioById("on").stop();
@@ -11833,9 +11843,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               fo = false;
             }
             function reverse() {
-              joint4.SetMaxMotorTorque(22);
+              joint4.SetMaxMotorTorque(22 * torque);
               joint4.SetMotorSpeed(-600);
-              joint5.SetMaxMotorTorque(22);
+              joint5.SetMaxMotorTorque(22 * torque);
               joint5.SetMotorSpeed(-600);
               lamp2.show();
               re = true;
@@ -12014,6 +12024,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var fo = false;
           var seTime = 0;
           var hit = false;
+          weight = weight < 0.1 ? 0.1 : weight;
           scene.onLoad.add(function () {
             var colors = scene.asset.getJSONContent("/text/color.json");
             var bgColor = colors.bgColor;
@@ -12118,7 +12129,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               objects.push(floor);
               var floorDef = box2d.createFixtureDef({
                 density: 1.0,
-                friction: 0.5,
+                friction: tireFriction,
                 restitution: 0.3,
                 shape: box2d.createRectShape(floor.width, floor.height),
                 // 地面エンティティを四角に設定
@@ -12159,7 +12170,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             //objects.push(floorTop);
             var floorTopDef = box2d.createFixtureDef({
               density: 1.0,
-              friction: 0.5,
+              friction: tireFriction,
               restitution: 0.3,
               shape: box2d.createRectShape(floorTop.width, floorTop.height),
               // 地面エンティティを四角に設定
@@ -12171,7 +12182,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             box2d.createBody(floorTop, staticDef, floorTopDef);
             var sabo2TopDef = box2d.createFixtureDef({
               density: 1.0,
-              friction: 0.5,
+              friction: tireFriction,
               restitution: 0.3,
               shape: box2d.createRectShape(sabo2.width * 0.8, sabo2.height * 0.8),
               // 地面エンティティを四角に設定
@@ -12219,7 +12230,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }
             var floorEndDef = box2d.createFixtureDef({
               density: 1.0,
-              friction: 0.5,
+              friction: tireFriction,
               restitution: 0.3,
               shape: box2d.createRectShape(floorEnd.width, floorEnd.height),
               // 地面エンティティを四角に設定
@@ -12231,7 +12242,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             box2d.createBody(floorEnd, staticDef, floorEndDef);
             var floorEndDef = box2d.createFixtureDef({
               density: 1.0,
-              friction: 0.5,
+              friction: tireFriction,
               restitution: 0.3,
               shape: box2d.createRectShape(floor.width, floor.height),
               // 地面エンティティを四角に設定
@@ -12323,10 +12334,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             // rect1
             var a = box2d.createBody(rect1, dynamicDef, box2d.createFixtureDef({
-              density: 1.5,
-              //密度//1
+              density: weight,
+              //密度1.5
               friction: 0.5,
-              //摩擦0.5
+              //摩擦
               restitution: 0,
               // 反発係数
               shape: box2d.createRectShape(rect1.width * 0.95, rect1.height * carBlockHeight),
@@ -12337,12 +12348,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }));
             // rect2
             var a2 = box2d.createBody(rect2, dynamicDef, box2d.createFixtureDef({
-              density: 3,
-              //密度//0.8
+              density: weight,
+              //密度3
               friction: 0.5,
               //摩擦
               restitution: 0.5,
-              // 反発係数//0
+              // 反発係数
               shape: box2d.createRectShape(rect2.width, rect2.height),
               filter: {
                 categoryBits: 2,
@@ -12385,7 +12396,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var b = box2d.createBody(tire1, dynamicDef, box2d.createFixtureDef({
               density: 1.5,
               //密度
-              friction: 0.5,
+              friction: tireFriction,
               //摩擦//0.9
               restitution: 0,
               // 反発係数//0.2
@@ -12399,7 +12410,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var c = box2d.createBody(tire2, dynamicDef, box2d.createFixtureDef({
               density: 1.5,
               //密度
-              friction: 0.5,
+              friction: tireFriction,
               //摩擦//0.9
               restitution: 0,
               // 反発係数//0.2
@@ -12444,6 +12455,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             def5.enableMotor = true;
             var joint4 = box2d.world.CreateJoint(def4);
             var joint5 = box2d.world.CreateJoint(def5);
+            if (diffLock) {
+              var def6 = new b2.Box2DWeb.Dynamics.Joints.b2GearJointDef();
+              def6.bodyA = joint4.GetBodyA();
+              def6.bodyB = joint5.GetBodyB();
+              def6.joint1 = joint4;
+              def6.joint2 = joint5;
+              def6.ratio = -1;
+              var gearJoint = box2d.world.CreateJoint(def6);
+            }
             var L = false;
             var R = false;
             scene.onPointDownCapture.add(function (e) {
@@ -12486,9 +12506,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               }
             });
             function on() {
-              joint4.SetMaxMotorTorque(22);
+              joint4.SetMaxMotorTorque(22 * torque);
               joint4.SetMotorSpeed(600);
-              joint5.SetMaxMotorTorque(22);
+              joint5.SetMaxMotorTorque(22 * torque);
               joint5.SetMotorSpeed(600);
               lamp2.hide();
               scene.asset.getAudioById("on").stop();
@@ -12509,9 +12529,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               fo = false;
             }
             function reverse() {
-              joint4.SetMaxMotorTorque(22);
+              joint4.SetMaxMotorTorque(22 * torque);
               joint4.SetMotorSpeed(-600);
-              joint5.SetMaxMotorTorque(22);
+              joint5.SetMaxMotorTorque(22 * torque);
               joint5.SetMotorSpeed(-600);
               lamp2.show();
               re = true;
@@ -12678,18 +12698,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var titleTime = 0;
         var gameTime = 30;
         var isTitle = true;
-        //車の調整
+        //車体の設定（ 車画像の空白部分の再現のため2つのブロックを重ねて使用 ）
+        //車体ブロック：画像の中心がアンカーのブロック
         var carBlockWidth = 0.95; //車体ブロックの幅（ 1で画像比100パーセント ）
-        var carBlockHeight = 0.1; //車体ブロックの高さ（ 1で画像比100パーセント ）
-        var carRoofWidth = 0.4; //ルーフブロックの幅（ 1で画像比100パーセント ）
+        var carBlockHeight = 0.1; //車体ブロックの高さ（ 画像高さと車の低い部分の高さの比率）
+        //ルーフブロック：画像の下端がアンカーのブロック
+        var carRoofWidth = 0.4; //ルーフブロックの幅（ 画像幅とルーフ幅の比率）
         var carRoofHeight = 1; //ルーフブロックの高さ（ 1で画像比100パーセント ）
         var roofBlockDebug = false; //ルーフブロックの可視化（ デバッグ用 ）
         var carRoofOffsetX = 0; //ルーフブロックのx座標調整（ ピクセル ）
+        var weight = 2.0; //ブロックの密度（ 比重 ）
+        //タイヤの設定
+        var torque = 1; //タイヤを回すトルクの倍率
+        var tireFriction = 0.9; //タイヤの摩擦係数
+        var diffLock = false; //デフロック（ 前後輪をギヤでつなぐ ）
         var frontTireOffsetX = 0; //前輪のx座標調整（ ピクセル ）
         var frontTireOffsetY = 0; //前輪のy座標調整（ ピクセル ）
         var rearTireOffsetX = 0; //後輪のx座標調整（ ピクセル ）
         var rearTireOffsetY = 0; //後輪のy座標調整（ ピクセル ）
-        //全体の調整
+        //全体の設定
         var gravity = 9.8; //物理エンジン世界の重力
         var scoreText = "SCORE: "; //スコアラベルの文字
         var timeText = "TIME: "; //タイムラベルの文字
