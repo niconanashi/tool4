@@ -11553,12 +11553,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             var rect2 = new g.FilledRect({
               scene: scene,
-              cssColor: "transparent",
-              x: 200 + rect1.width * 0.3,
+              cssColor: roofBlockDebug ? "red" : "transparent",
+              x: 200 + rect1.width * 0.5 + carRoofOffsetX,
               y: 320,
+              anchorX: 0.5,
               anchorY: 1,
-              width: rect1.width * 0.4,
-              height: rect1.height,
+              width: rect1.width * carRoofWidth,
+              height: rect1.height * carRoofHeight,
+              opacity: 0.7,
               parent: scene
             });
             var lamp1 = new g.FilledRect({
@@ -11585,7 +11587,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var r = new g.E({
               scene: scene,
               x: 200 + scene.asset.getImageById("tire").width * 0.6 + rearTireOffsetX,
-              y: rect1.y,
+              y: rect1.y + rearTireOffsetY,
               anchorX: 0.5,
               anchorY: 0.5,
               width: 10,
@@ -11595,7 +11597,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var f = new g.E({
               scene: scene,
               x: 200 + rect1.width - scene.asset.getImageById("tire").width * 0.6 + frontTireOffsetX,
-              y: rect1.y,
+              y: rect1.y + frontTireOffsetY,
               anchorX: 0.5,
               anchorY: 0.5,
               width: 10,
@@ -11649,7 +11651,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               //摩擦0.5
               restitution: 0,
               // 反発係数
-              shape: box2d.createRectShape(rect1.width * 0.95, rect1.height * 0.1),
+              shape: box2d.createRectShape(rect1.width * carBlockWidth, rect1.height * carBlockHeight),
               filter: {
                 categoryBits: 2,
                 maskBits: 5
@@ -12250,12 +12252,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             var rect2 = new g.FilledRect({
               scene: scene,
-              cssColor: "transparent",
-              x: 200 + rect1.width * 0.3,
+              cssColor: roofBlockDebug ? "red" : "transparent",
+              x: 200 + rect1.width * 0.5 + carRoofOffsetX,
               y: 320,
+              anchorX: 0.5,
               anchorY: 1,
-              width: rect1.width * 0.4,
-              height: rect1.height,
+              width: rect1.width * carRoofWidth,
+              height: rect1.height * carRoofHeight,
+              opacity: 0.7,
               parent: scene
             });
             var lamp1 = new g.FilledRect({
@@ -12282,7 +12286,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var r = new g.E({
               scene: scene,
               x: 200 + scene.asset.getImageById("tire").width * 0.6 + rearTireOffsetX,
-              y: rect1.y,
+              y: rect1.y + rearTireOffsetY,
               anchorX: 0.5,
               anchorY: 0.5,
               width: 10,
@@ -12292,7 +12296,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var f = new g.E({
               scene: scene,
               x: 200 + rect1.width - scene.asset.getImageById("tire").width * 0.6 + frontTireOffsetX,
-              y: rect1.y,
+              y: rect1.y + frontTireOffsetY,
               anchorX: 0.5,
               anchorY: 0.5,
               width: 10,
@@ -12325,7 +12329,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               //摩擦0.5
               restitution: 0,
               // 反発係数
-              shape: box2d.createRectShape(rect1.width * 0.95, rect1.height * 0.1),
+              shape: box2d.createRectShape(rect1.width * 0.95, rect1.height * carBlockHeight),
               filter: {
                 categoryBits: 2,
                 maskBits: 1
@@ -12674,9 +12678,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var titleTime = 0;
         var gameTime = 30;
         var isTitle = true;
+        //車の調整
+        var carBlockWidth = 0.95; //車体ブロックの幅（ 1で画像比100パーセント ）
+        var carBlockHeight = 0.1; //車体ブロックの高さ（ 1で画像比100パーセント ）
+        var carRoofWidth = 0.4; //ルーフブロックの幅（ 1で画像比100パーセント ）
+        var carRoofHeight = 1; //ルーフブロックの高さ（ 1で画像比100パーセント ）
+        var roofBlockDebug = false; //ルーフブロックの可視化（ デバッグ用 ）
+        var carRoofOffsetX = 0; //ルーフブロックのx座標調整（ ピクセル ）
+        var frontTireOffsetX = 0; //前輪のx座標調整（ ピクセル ）
+        var frontTireOffsetY = 0; //前輪のy座標調整（ ピクセル ）
+        var rearTireOffsetX = 0; //後輪のx座標調整（ ピクセル ）
+        var rearTireOffsetY = 0; //後輪のy座標調整（ ピクセル ）
+        //全体の調整
         var gravity = 9.8; //物理エンジン世界の重力
-        var frontTireOffsetX = 0; //前輪のx座標調整
-        var rearTireOffsetX = 0; //後輪のx座標調整
         var scoreText = "SCORE: "; //スコアラベルの文字
         var timeText = "TIME: "; //タイムラベルの文字
         var resetText = "リセット"; //リセットボタンの文字	
