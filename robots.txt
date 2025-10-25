@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://niconanashi.github.io/tool4/sitemap.xml
