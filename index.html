@@ -3,440 +3,528 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>ニコ生CMメーカー作成ツール</title>
-	<!-- 安定動作するライブラリ群 -->
-	<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<title>車メーカー - ニコ生ゲーム制作ツール</title>
+	<meta name="description" content="オンラインでニコ生ゲームを簡単に作れるツール。プログラミング不要でAkashic Engine製のニコ生ゲーム開発が可能です。コードの変更も可能。">
+	<meta name="keywords" content="車メーカー, 車コロコロ, ニコ生ゲーム, Akashic Engine">
+	<meta name="robots" content="index, follow">
+	<meta name="google-site-verification" content="HQFPvhPPAnrfZseE3dvokBfOWaMYmx4T3Hxxdr-UNRw">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-	<!-- 並び替え用ライブラリ -->
-	<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 	<style>
 		body {
-			font-family: 'Segoe UI', Tahoma, sans-serif;
-			background-color: #f0f4f8;
+			font-size: 18px;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: #e0e6ed;
 			color: #333;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			margin: 0;
 			padding: 20px;
 		}
-		.card {
-			background: white;
-			padding: 25px;
-			border-radius: 15px;
-			box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-			width: 100%;
-			max-width: 900px;
-		}
-		h1 { color: #2d3748; text-align: center; font-size: 24px; }
-		.config-section {
+		.container {
 			display: flex;
 			flex-wrap: wrap;
-			gap: 15px;
-			background: #edf2f7;
-			padding: 15px;
-			border-radius: 10px;
-			margin-bottom: 20px;
+			gap: 20px;
+			justify-content: center;
+			padding: 20px;
+			background: #ffffff;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+			border-radius: 12px;
+			max-width: 900px;
 		}
-		.input-item { display: flex; flex-direction: column; gap: 5px; }
-		input[type="number"] { width: 80px; padding: 5px; border-radius: 5px; border: 1px solid #cbd5e0; }
-		
-		/* 画像グリッドエリア */
-		.image-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-			gap: 15px;
-			margin: 20px 0;
-			min-height: 200px;
+		.item {
+			width: 150px;
+			text-align: center;
 		}
-		.image-item {
+		.item2 {
+			width: 600px;
+			text-align: center;
+		}
+		.image-container {
 			position: relative;
-			background: #fff;
-			border: 2px solid #e2e8f0;
-			border-radius: 8px;
-			padding: 5px;
-			cursor: grab;
-			transition: transform 0.2s;
-		}
-		.image-item:active { cursor: grabbing; }
-		.image-item img {
-			width: 100%;
-			height: 90px;
-			object-fit: contain;
-			background: #eee;
-			border-radius: 4px;
-			display: block;
-		}
-		.image-label {
-			font-size: 12px;
+			width: 150px;
+			height: 150px;
+			border: 1px solid #ddd;
 			text-align: center;
-			margin-top: 5px;
-			font-weight: bold;
-			color: #4a5568;
+			line-height: 150px;
+			margin-bottom: 10px;
+			overflow: hidden;
+			background: #f9f9f9;
 		}
-		
-		/* 操作ボタン */
-		.btn-delete {
+		.image-container img {
+			display: block;
+			max-width: 100%;
+			max-height: 100%;
+			position: relative;
+			z-index: 1;
+			background-color: white;
+		}
+		.image-container::before {
+			content: '';
 			position: absolute;
-			top: -8px;
-			right: -8px;
-			background: #e53e3e;
-			color: white;
-			border: none;
-			border-radius: 50%;
-			width: 24px;
-			height: 24px;
-			cursor: pointer;
-			font-weight: bold;
-			z-index: 10;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 120, 215, 0.1);
+			z-index: 0;
 		}
-		.btn-add {
-			background: #3182ce;
-			color: white;
+		.image-container textarea {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			z-index: 2;
+			cursor: pointer;
+		}
+		.color-sample {
+			display: inline-block;
+			width: 50px;
+			height: 20px;
+			margin-left: 10px;
+			border: 1px solid #000;
+		}
+		button {
+			font-size: 18px;
 			padding: 10px 20px;
-			border: none;
-			border-radius: 6px;
-			cursor: pointer;
-			font-weight: bold;
-			margin-bottom: 20px;
-		}
-		#downloadZip {
-			background: #48bb78;
+			margin: 20px;
+			background-color: #0078d7;
 			color: white;
-			padding: 15px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s;
+		}
+		button:hover {
+			background-color: #005a9e;
+		}
+		#warning {
+			color: red;
+			margin-top: 10px;
+		}
+		#warning2, #warning3 {
+			color: red;
+			margin-top: 5px;
+		}
+		h1, h2, h3 {
+			color: #0078d7;
+		}
+		label {
+			font-size: 18px;
+		}
+		input[type="color"] {
+			width: 90px;
+			height: 90px;
+			border: 2px solid #0078d7;
+			border-radius: 10px;
+			margin: 0.5em 0;
+			cursor: pointer;
+			transition: border 0.3s;
+		}
+		input[type="color"]::-webkit-color-swatch-wrapper {
+			padding: 0;
+		}
+		input[type="color"]::-webkit-color-swatch {
 			border: none;
 			border-radius: 10px;
-			width: 100%;
-			font-size: 18px;
-			font-weight: bold;
-			cursor: pointer;
-			display: none;
 		}
-		#status {
-			margin: 15px 0;
-			font-weight: bold;
-			color: #2b6cb0;
-			text-align: center;
-		}
-		.instructions { font-size: 14px; color: #718096; text-align: center; margin-bottom: 10px; }
 	</style>
 </head>
 <body>
+	<h1>車メーカー - ニコ生ゲーム制作ツール</h1>
+	<p>このページで車コロコロの車を作り、ニコ生ゲームの投稿ファイル（game.zip）を簡単に作成できます。</p>
+	<h2>作り方</h2>
+	<ol>
+		<li>表示されている画像にドラッグ＆ドロップまたはペーストで新しい画像に変更します。</li>
+		<li>ゲーム内のカラーを設定します。</li>
+		<li>変更した内容を含むZIPファイルをダウンロードボタンを押してダウンロードします。</li>
+		<li>ダウンロードしたファイルをニコ生ゲームとして投稿します。</li>
+	</ol>
+	<p>※画像はPNG形式で、幅と高さが10ピクセル以上500ピクセル以下である必要があります。</p>
+	<p>画像サイズでパーツの大きさと重さが決まるので調整してください。</p>
 
-<div class="card">
-	<h1>ニコ生CMメーカー 制作ツール</h1>
-	<p class="instructions">画像をドラッグして並び替え / 画像をクリックして個別に差し替え</p>
-
-	<div class="config-section">
-		<div class="input-item">
-			<label>フェードイン速度</label>
-			<input type="number" id="fadeInSpeed" value="0.02" step="0.01" min="0.01">
+	<div class="container">
+		<div class="item">
+			<h3>画像変更</h3>
+			<div class="image-container">
+				<img id="car" src="game/files/car.png" alt="car">
+				<textarea></textarea>
+			</div>
+			<p>車体 ： 200x100</p>
 		</div>
-		<div class="input-item">
-			<label>フェードアウト速度</label>
-			<input type="number" id="fadeOutSpeed" value="0.1" step="0.01" min="0.01">
+		<div class="item">
+			<h3>画像変更</h3>
+			<div class="image-container">
+				<img id="tire" src="game/files/tire.png" alt="tire">
+				<textarea></textarea>
+			</div>
+			<p>タイヤ ： 50x50</p>
 		</div>
-		<div class="input-item" style="flex-grow: 1;">
-			<label>BGMを選択 (m4a/oggへ自動変換)</label>
-			<input type="file" id="audio-input" accept="audio/*">
+		<div class="item">
+			<h3>画像変更</h3>
+			<div class="image-container">
+				<img id="ki" src="game/files/ki.png" alt="ki">
+				<textarea></textarea>
+			</div>
+			<p>木 ： 80x200</p>
+		</div>
+		<div class="item">
+			<h3>画像変更</h3>
+			<div class="image-container">
+				<img id="sabo" src="game/files/sabo.png" alt="sabo">
+				<textarea></textarea>
+			</div>
+			<p>サボテン： 100x150</p>
 		</div>
 	</div>
-
-	<div style="text-align:center;">
-		<button class="btn-add" onclick="document.getElementById('bulk-image-input').click()">画像を追加 (1280x720)</button>
-		<input type="file" id="bulk-image-input" style="display:none" multiple accept="image/*">
+	<div id="warning"></div>
+	<div class="container">
+		<div class="item2">
+			<h3>装飾フレーム追加</h3>
+		<label for="decorFrame">装飾フレームを付ける： </label>
+		<input type="checkbox" id="decorFrame">
+			<p>画面サイズ1280x720のフレーム画像を固定表示できます。</p>
+			<div class="image-container">
+				<img id="frame" src="game/files/frame.png" alt="frame">
+				<textarea></textarea>
+			</div>
+			<p>フレーム： 1280x720</p>
+		</div>
 	</div>
-
-	<div id="image-grid" class="image-grid">
-		<!-- ここに画像スロットが表示されます -->
+	<div id="warning2"></div>
+	<div class="container">
+		<div class="item2">
+			<h3>タイトル画面追加</h3>
+		<label for="decorTitle">タイトル画面を付ける： </label>
+		<input type="checkbox" id="decorTitle">
+			<p>画面サイズ1280x720のタイトル画像を3秒間表示できます。</p>
+			<div class="image-container">
+				<img id="title" src="game/files/title.png" alt="title">
+				<textarea></textarea>
+			</div>
+			<p>タイトル： 1280x720</p>
+		</div>
 	</div>
+	<div id="warning3"></div>
+	<div class="container">
+		<div class="item2">
+			<h3>背景画像追加</h3>
+		<label for="decorBg2">背景に画像を付ける： </label>
+		<input type="checkbox" id="decorBg2">
+			<p>画面サイズ1280x720の背景に遠景の画像を重ねて表示できます。</p>
+			<div class="image-container">
+				<img id="bg2" src="game/files/bg2.png" alt="bg2">
+				<textarea></textarea>
+			</div>
+			<p>背景： 1280x720</p>
+		</div>
+	</div>
+	<h2>色の変更</h2>
+	<label for="bgColor">背景色:</label>
+	<input type="color" id="bgColor" name="bgColor" value="#0F5474" style="width: 90px; height: 90px; border-radius: 10px; border: 2px solid #0078d7;"><br>
+	<label for="floorColor">地面色:</label>
+	<input type="color" id="floorColor" name="floorColor" value="#977609" style="width: 90px; height: 90px; border-radius: 10px; border: 2px solid #0078d7;"><br>
+	<label for="textColor">文字色:</label>
+	<input type="color" id="textColor" name="textColor" value="white" style="width: 90px; height: 90px; border-radius: 10px; border: 2px solid #0078d7;"><br>
+	<button id="downloadZip">game.zip をダウンロード</button>
+	<div class="container" style="margin-top: 100px;">
+		<pre>
+		音声ファイルや時間を変更する場合
 
-	<div id="status">FFmpegを準備中...</div>
-	<button id="downloadZip">game.zip を作成してダウンロード</button>
+
+
+・投稿ファイルの編集方法
+ダウンロードしたファイルを右クリックし [すべて展開] を選択し解凍します。
+編集後に
+files フォルダと game.json を同時選択した状態で右クリックし
+[送る] [圧縮(zip)] を選択し投稿用のzipファイルを作ります。
+
+・音声ファイルの変更
+1つの音に対し同じファイル名の .aac と .ogg の2種類の音声ファイルが必要です。
+mp3などの音声をオンラインの変換サイトを探し変換するのが簡単です。
+files フォルダ内
+bgm：ループ再生させる音
+on：アクセルオンの音
+off：アクセルオフの音
+
+・音量の変更
+files フォルダ内の main.js をメモ帳などで開きます。
+最下部付近
+g.game.audio.music.volume = 0.2; //bgmの音量（ 0～1の範囲 ）
+g.game.audio.sound.volume = 0.4; //効果音の音量（ 0～1の範囲 ）
+この値を 0～1 の範囲で変更し上書き保存します。
+
+・ゲーム時間の変更
+game.json をメモ帳などで開きます。
+最下部から少し上
+"totalTimeLimit": 37
+この値を変更し上書き保存します。（ 0～200の範囲 ）
+これはゲーム起動から集計までの時間です。
+読み込み時間 7秒 と タイトル表示時間 3秒 と ゲーム時間 30秒 を足した値。
+初期状態は、タイトルなしの場合 37、タイトルありの場合 40 で書き込まれ
+ゲーム時間は30秒です。
+
+・タイトル表示時間の変更
+files内の main.js をメモ帳などで開きます。
+最下部付近
+titleTime = 3; //タイトルなしにする場合は0
+この値を変更し上書き保存します。
+
+・ゲーム内の制限時間の変更
+ゲーム内の制限時間は totalTimeLimit と titleTime から自動で決まります。
+( totalTimeLimit - titleTime - 7 )
+
+その他の簡単に変更可能な変数もfiles内の main.js の最下部にまとめてあります。
+	</pre>
 </div>
-
-<!-- 差し替え用の隠しinput -->
-<input type="file" id="replace-input" style="display:none" accept="image/*">
-
 <script>
-	const { createFFmpeg, fetchFile } = FFmpeg;
-	const gridEl = document.getElementById('image-grid');
-	const status = document.getElementById('status');
-	const downloadBtn = document.getElementById('downloadZip');
-	const replaceInput = document.getElementById('replace-input');
-
-	// FFmpeg初期化 (安定スレッド版コアを指定)
-	const ffmpeg = createFFmpeg({
-		log: true,
-		corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
-	});
-
-	let bgmData = { m4a: null, ogg: null, duration: 0 };
-	let imageList = []; // { id, blob, url }
-	let currentReplaceId = null;
-
-	(async () => {
-		try {
-			await ffmpeg.load();
-			status.innerText = "初期画像をロード中...";
-			await loadInitialImages();
-		} catch (e) {
-			status.innerHTML = "<span style='color:red'>エラー: FFmpegの読み込みに失敗しました。再読み込みしてください。</span>";
-		}
-	})();
-
-	// 初期画像(a.png〜t.png)をリポジトリから読み込む
-	async function loadInitialImages() {
-		const alphabet = "abcdefghijklmnopqrst".split("");
-		for (const char of alphabet) {
-			try {
-				const response = await fetch(`game/files/${char}.png`);
-				if (!response.ok) continue;
-				const blob = await response.blob();
-				addImageToList(blob);
-			} catch (e) {
-				console.log("Initial image load error: ", char);
-			}
-		}
-		status.innerText = "準備完了！";
-		checkReady();
-	}
-
-	// 画像リストへの追加処理
-	function addImageToList(blob) {
-		const img = new Image();
-		const url = URL.createObjectURL(blob);
-		img.onload = () => {
-			if (img.width === 1280 && img.height === 720) {
-				const item = { id: Math.random(), blob: blob, url: url };
-				imageList.push(item);
-				renderItem(item);
-			} else {
-				alert("1280x720以外の画像は読み込めません。");
-			}
-		};
-		img.src = url;
-	}
-
-	// 画面描画
-	function renderItem(item) {
-		const div = document.createElement('div');
-		div.className = 'image-item';
-		div.dataset.id = item.id;
-		div.innerHTML = `
-			<button class="btn-delete" onclick="deleteImage(${item.id})">×</button>
-			<img src="${item.url}" onclick="triggerReplace(${item.id})">
-			<div class="image-label"></div>
-		`;
-		gridEl.appendChild(div);
-		updateLabels();
-	}
-
-	function updateLabels() {
-		const labels = gridEl.querySelectorAll('.image-label');
-		labels.forEach((el, i) => el.innerText = `${i + 1}枚目`);
-	}
-
-	// 並び替え有効化
-	Sortable.create(gridEl, {
-		animation: 150,
-		onEnd: () => {
-			const newOrder = [];
-			gridEl.querySelectorAll('.image-item').forEach(el => {
-				const id = parseFloat(el.dataset.id);
-				newOrder.push(imageList.find(img => img.id === id));
-			});
-			imageList = newOrder;
-			updateLabels();
+	const images = {
+		"car": "game/files/car.png",
+		"tire": "game/files/tire.png",
+		"ki": "game/files/ki.png",
+		"sabo": "game/files/sabo.png",
+		"frame": "game/files/frame.png",
+		"title": "game/files/title.png",
+		"bg2": "game/files/bg2.png"
+	};
+	const audioFiles = [
+		"game/files/bgm.aac",
+		"game/files/bgm.ogg",
+		"game/files/on.aac",
+		"game/files/on.ogg",
+		"game/files/off.aac",
+		"game/files/off.ogg"
+	];
+	let colors = {
+		"bgColor": "#0F5474",
+		"floorColor": "#977609",
+		"textColor": "#FFFFFF"
+	};
+	const decorFrameCheckbox = document.getElementById('decorFrame');
+	const frameImageContainer = document.getElementById('frame').parentNode;
+	const decorTitleCheckbox = document.getElementById('decorTitle');
+	const titleImageContainer = document.getElementById('title').parentNode;
+	const decorBg2Checkbox = document.getElementById('decorBg2');
+	const bg2ImageContainer = document.getElementById('bg2').parentNode;
+	decorFrameCheckbox.addEventListener('change', () => {
+		if (decorFrameCheckbox.checked) {
+			frameImageContainer.style.display = 'block';
+		} else {
+			frameImageContainer.style.display = 'none';
+			document.getElementById('frame').src = 'game/files/frame.png';
+			images['frame'] = 'game/files/frame.png';
 		}
 	});
-
-	// --- 操作関数 ---
-
-	function deleteImage(id) {
-		imageList = imageList.filter(img => img.id !== id);
-		const el = gridEl.querySelector(`[data-id="${id}"]`);
-		if (el) el.remove();
-		updateLabels();
-		checkReady();
-	}
-
-	function triggerReplace(id) {
-		currentReplaceId = id;
-		replaceInput.click();
-	}
-
-	replaceInput.onchange = (e) => {
-		const file = e.target.files[0];
-		if (!file) return;
-		const img = new Image();
-		const url = URL.createObjectURL(file);
-		img.onload = () => {
-			if (img.width === 1280 && img.height === 720) {
-				const index = imageList.findIndex(img => img.id === currentReplaceId);
-				imageList[index].blob = file;
-				imageList[index].url = url;
-				const imgTag = gridEl.querySelector(`[data-id="${currentReplaceId}"] img`);
-				imgTag.src = url;
-			} else {
-				alert("1280x720サイズのみ許可されています。");
-			}
-		};
-		img.src = url;
-	};
-
-	document.getElementById('bulk-image-input').onchange = (e) => {
-		Array.from(e.target.files).forEach(file => addImageToList(file));
-	};
-
-	// --- 音声変換ロジック (提供された安定版を流用) ---
-
-	document.getElementById('audio-input').onchange = async (e) => {
-		const file = e.target.files[0];
-		if (!file || !ffmpeg.isLoaded()) return;
-
-		downloadBtn.style.display = 'none';
-		status.innerText = "音声変換中...時間がかかる場合があります";
-		
-		try {
-			// 再生時間の取得
-			const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-			const buffer = await file.arrayBuffer();
-			const decoded = await audioCtx.decodeAudioData(buffer);
-			bgmData.duration = Math.floor(decoded.duration * 1000);
-
-			// 仮想FSに書き込み
-			ffmpeg.FS('writeFile', 'bgm_tmp', await fetchFile(file));
-
-			// M4A変換
-			status.innerHTML = "AAC (M4A) に変換中...";
-			await ffmpeg.run('-i', 'bgm_tmp', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', 'out.m4a');
-			bgmData.m4a = ffmpeg.FS('readFile', 'out.m4a');
-
-			// OGG変換
-			status.innerHTML = "OGGに変換中...";
-			await ffmpeg.run('-i', 'bgm_tmp', '-c:a', 'libvorbis', '-q:a', '4', 'out.ogg');
-			bgmData.ogg = ffmpeg.FS('readFile', 'out.ogg');
-
-			status.innerText = `音声準備完了 (${(bgmData.duration/1000).toFixed(1)}秒)`;
-			checkReady();
-		} catch (err) {
-			console.error(err);
-			status.innerHTML = "<span style='color:red'>音声の変換に失敗しました。</span>";
+	frameImageContainer.style.display = 'none';
+	document.querySelectorAll('.image-container').forEach(div => {
+		div.addEventListener('dragover', event => event.preventDefault());
+		div.addEventListener('drop', handleDrop);
+		div.querySelector('textarea').addEventListener('paste', handlePaste);
+	});
+	decorTitleCheckbox.addEventListener('change', () => {
+		if (decorTitleCheckbox.checked) {
+			titleImageContainer.style.display = 'block';
+			updateTotalTimeLimit(40);
+		} else {
+			titleImageContainer.style.display = 'none';
+			document.getElementById('title').src = 'game/files/title.png';
+			images['title'] = 'game/files/title.png';
+			updateTotalTimeLimit(37);
 		}
-	};
+	});
+	titleImageContainer.style.display = 'none';
+	document.querySelectorAll('.image-container').forEach(div => {
+		div.addEventListener('dragover', event => event.preventDefault());
+		div.addEventListener('drop', handleDrop);
+		div.querySelector('textarea').addEventListener('paste', handlePaste);
+	});
+	decorBg2Checkbox.addEventListener('change', () => {
+		if (decorBg2Checkbox.checked) {
+			bg2ImageContainer.style.display = 'block';
+		} else {
+			bg2ImageContainer.style.display = 'none';
+			document.getElementById('bg2').src = 'game/files/bg2.png';
+			images['bg2'] = 'game/files/bg2.png';
+		}
+	});
+	bg2ImageContainer.style.display = 'none';
+	document.querySelectorAll('.image-container').forEach(div => {
+		div.addEventListener('dragover', event => event.preventDefault());
+		div.addEventListener('drop', handleDrop);
+		div.querySelector('textarea').addEventListener('paste', handlePaste);
+	});
 
-	function checkReady() {
-		if (bgmData.m4a && imageList.length > 0) {
-			downloadBtn.style.display = 'block';
+	async function loadGameJson() {
+		const response = await fetch('game/game.json');
+		return await response.json();
+	}
+	async function loadColorJson() {
+		const response = await fetch('game/files/color.json');
+		colors = await response.json();
+		document.getElementById('bgColor').value = colors.bgColor;
+		document.getElementById('floorColor').value = colors.floorColor;
+		document.getElementById('textColor').value = colors.textColor;
+		updateColorSamples();
+	}
+	function updateColorSamples() {
+		const bgColorSample = document.getElementById('bgColorSample');
+		const floorColorSample = document.getElementById('floorColorSample');
+		const textColorSample = document.getElementById('textColorSample');
+
+		if (bgColorSample) {
+			bgColorSample.style.backgroundColor = colors.bgColor;
+		}
+		if (floorColorSample) {
+			floorColorSample.style.backgroundColor = colors.floorColor;
+		}
+		if (textColorSample) {
+			textColorSample.style.backgroundColor = colors.textColor;
 		}
 	}
-
-	// --- ZIP作成と変数書き換え ---
-
-	downloadBtn.onclick = async () => {
-		status.innerText = "ZIPアーカイブを作成中...";
-		const zip = new JSZip();
-		const imageIds = imageList.map((_, i) => String.fromCharCode(97 + i)); // a, b, c...
-
-		// 1. game.json 作成
-		const gameJson = {
-			width: 1280, height: 720, fps: 30,
-			main: "./script/main.js",
-			assets: {
-				bgm: {
-					type: "audio", path: "files/bgm", systemId: "sound",
-					duration: bgmData.duration, hint: { extensions: [".m4a", ".ogg"] }
-				},
-				aez_asset_bundle: {
-					type: "script", global: true, path: "files/main.js", virtualPath: "script/aez_asset_bundle.js"
+	function handleDrop(event) {
+		event.preventDefault();
+		const file = event.dataTransfer.files[0];
+		processFile(file, event.currentTarget.querySelector('img'));
+	}
+	function handlePaste(event) {
+		const items = event.clipboardData.items;
+		const target = event.currentTarget.parentNode.querySelector('img');
+		if (target) {
+			for (let item of items) {
+				if (item.kind === 'file') {
+					const file = item.getAsFile();
+					processFile(file, target);
 				}
-			},
-			environment: {
-				"sandbox-runtime": "3",
-				nicolive: { supportedModes: ["ranking"], preferredSessionParameters: { totalTimeLimit: Math.ceil(bgmData.duration / 1000) + 5 } }
-			},
-			assetBundle: "./script/aez_asset_bundle.js"
+			}
+		}
+	}
+	function processFile(file, target) {
+		const warningDiv = document.getElementById('warning');
+		warningDiv.textContent = '';
+		if (!file.type.startsWith('image/png')) {
+			warningDiv.textContent = 'エラー：サポートされている画像形式はPNGのみです。';
+			return;
+		}
+		const img = new Image();
+		img.onload = function() {
+			if (target.id === 'frame' && !validateFrameImage(img)) {
+				return;
+			}
+			if (target.id === 'title' && !validateTitleImage(img)) {
+				return;
+			}
+			if (target.id === 'bg2' && !validateBg2Image(img)) {
+				return;
+			}
+			if ((target.id !== 'frame' && target.id !== 'title' && target.id !== 'bg2') && (img.width < 10 || img.width > 500 || img.height < 10 || img.height > 500)) {
+				warningDiv.textContent = 'エラー：幅と高さは10ピクセル以上、500ピクセル以下である必要があります。';
+				return;
+			}
+			updateImage(target, img.src);
 		};
-		// 画像アセットを動的に追加
-		imageIds.forEach(id => {
-			gameJson.assets[id] = { type: "image", path: `files/${id}.png`, width: 1280, height: 720 };
+		img.onerror = function() {
+			warningDiv.textContent = 'エラー：無効な画像ファイルです。';
+		};
+		const reader = new FileReader();
+		reader.onload = function(e) {
+			img.src = e.target.result;
+		};
+		reader.readAsDataURL(file);
+	}
+	function validateFrameImage(img) {
+		const warningDiv = document.getElementById('warning');
+		warningDiv.textContent = '';
+		if (img.width !== 1280 || img.height !== 720) {
+			warningDiv.textContent = 'エラー：フレーム画像のサイズは1280x720ピクセルである必要があります。';
+			return false;
+		}
+		return true;
+	}
+	function validateTitleImage(img) {
+		const warningDiv = document.getElementById('warning2');
+		warningDiv.textContent = '';
+		if (img.width !== 1280 || img.height !== 720) {
+			warningDiv.textContent = 'エラー：タイトル画像のサイズは1280x720ピクセルである必要があります。';
+			return false;
+		}
+		return true;
+	}
+	function validateBg2Image(img) {
+		const warningDiv = document.getElementById('warning3');
+		warningDiv.textContent = '';
+		if (img.width !== 1280 || img.height !== 720) {
+			warningDiv.textContent = 'エラー：背景画像のサイズは1280x720ピクセルである必要があります。';
+			return false;
+		}
+		return true;
+	}
+	function updateImage(target, dataUrl) {
+		if (!target) {
+			const warningDiv = document.getElementById('warning');
+			warningDiv.textContent = 'エラー：ターゲット画像要素が見つかりません。';
+			return;
+		}
+		target.src = dataUrl;
+		target.style.backgroundColor = 'white';
+		const assetKey = target.id;
+		images[assetKey] = dataUrl;
+	}
+	document.getElementById('downloadZip').addEventListener('click', async () => {
+		const zip = new JSZip();
+		let gameJson = await loadGameJson();
+		Object.keys(images).forEach(key => {
+			gameJson.assets[key].path = `files/${key}.png`;
+			const imgElement = document.getElementById(key);
+			gameJson.assets[key].width = imgElement.naturalWidth;
+			gameJson.assets[key].height = imgElement.naturalHeight;
 		});
-		zip.file("game.json", JSON.stringify(gameJson, null, "\t"));
-
-		// 2. main.js 作成 (入力値を反映)
-		const mainJsContent = `
-module.exports={assets:{"main": {type:"script",path:"script/main.js",global:true,execute: rv => {
-'use strict';
-function main(param) {
-  var TOTAL_MUSIC_DURATION = ${bgmData.duration};
-  var MAX_IMAGES = ${imageList.length};
-  var FADE_SPEED = ${document.getElementById('fadeInSpeed').value};
-  var FADE_SPEED2 = ${document.getElementById('fadeOutSpeed').value};
-  var IMAGE_IDS = ${JSON.stringify(imageIds)};
-
-  var timePerImage = TOTAL_MUSIC_DURATION / MAX_IMAGES;
-  var fps = 30;
-  var fadeTimeMs = 1 / FADE_SPEED * (1000 / fps);
-  var calculatedDuration = timePerImage - fadeTimeMs;
-  if (calculatedDuration < 0) calculatedDuration = 0;
-
-  var scene = new g.Scene({ game: g.game, assetPaths: ["/**/*"] });
-  scene.onLoad.add(function () {
-    if (scene.asset.getAudioById("bgm")) scene.asset.getAudioById("bgm").play();
-    var currentIndex = 0;
-    var currentSprite = null;
-
-    function showNextSlide() {
-      if (currentIndex >= MAX_IMAGES) {
-        var font = new g.DynamicFont({ game: g.game, fontFamily: "sans-serif", size: 60 });
-        new g.Label({ scene: scene, font: font, text: "ご視聴ありがとうございました", x: 640, y: 360, anchorX: 0.5, anchorY: 0.5, textColor: "white", parent: scene });
-        return;
-      }
-      var nextSprite = new g.Sprite({ scene: scene, src: scene.asset.getImageById(IMAGE_IDS[currentIndex]), opacity: currentIndex === 0 ? 1 : 0, parent: scene });
-      if (currentIndex === 0) { currentSprite = nextSprite; startTimer(timePerImage); } 
-      else {
-        var prevSprite = currentSprite;
-        nextSprite.onUpdate.add(function () {
-          if (nextSprite.opacity < 1) {
-            nextSprite.opacity += FADE_SPEED;
-            if (nextSprite.opacity > 1) nextSprite.opacity = 1;
-            nextSprite.modified();
-          } else {
-            nextSprite.onUpdate.removeAll();
-            prevSprite.onUpdate.add(function () {
-              prevSprite.opacity -= FADE_SPEED2;
-              if (prevSprite.opacity <= 0) { prevSprite.destroy(); } else { prevSprite.modified(); }
-            });
-            currentSprite = nextSprite;
-            startTimer(calculatedDuration);
-          }
-        });
-      }
-    }
-    function startTimer(duration) { scene.setTimeout(function () { currentIndex++; showNextSlide(); }, duration); }
-    showNextSlide();
-  });
-  g.game.pushScene(scene);
-}
-module.exports = main;
-return module.exports;
-},},"data": {type:"text",path:"text/data.json",data: \`{}\`,},}}`;
-
-		zip.file("files/main.js", mainJsContent);
-
-		// 3. 各ファイルをZIPに追加
-		zip.file("files/bgm.m4a", bgmData.m4a);
-		zip.file("files/bgm.ogg", bgmData.ogg);
-		imageList.forEach((img, i) => {
-			zip.file(`files/${imageIds[i]}.png`, img.blob);
+		Object.keys(colors).forEach(key => {
+			colors[key] = document.getElementById(key).value;
 		});
-
-		const content = await zip.generateAsync({ type: "blob" });
-		saveAs(content, "game.zip");
-		status.innerText = "ダウンロードが開始されました！";
-	};
+		gameJson.environment.nicolive.preferredSessionParameters.totalTimeLimit = decorTitleCheckbox.checked ? 40 : 37; // ここで更新
+		zip.file("game.json", JSON.stringify(gameJson, null, 2));
+		zip.file("files/color.json", JSON.stringify(colors, null, 2));
+		const fetchPromises = Object.keys(images).map(async key => {
+			const imgDataUrl = images[key];
+			const blob = await fetch(imgDataUrl).then(res => res.blob());
+			zip.file(`files/${key}.png`, blob);
+		});
+		fetchPromises.push((async () => {
+			const response = await fetch('game/files/main.js');
+			const blob = await response.blob();
+			zip.file('files/main.js', blob);
+		})());
+		audioFiles.forEach(filePath => {
+			fetchPromises.push((async () => {
+				const response = await fetch(filePath);
+				const blob = await response.blob();
+				zip.file(`files/${filePath.split('/').pop()}`, blob);
+			})());
+		});
+		if (decorFrameCheckbox.checked) {
+			const frameImgDataUrl = images['frame'];
+			const frameBlob = await fetch(frameImgDataUrl).then(res => res.blob());
+			zip.file('files/frame.png', frameBlob);
+		}
+		if (decorTitleCheckbox.checked) {
+			const titleImgDataUrl = images['title'];
+			const titleBlob = await fetch(titleImgDataUrl).then(res => res.blob());
+			zip.file('files/title.png', titleBlob);
+		}
+		if (decorBg2Checkbox.checked) {
+			const bg2ImgDataUrl = images['bg2'];
+			const bg2Blob = await fetch(bg2ImgDataUrl).then(res => res.blob());
+			zip.file('files/bg2.png', bg2Blob);
+		}
+		await Promise.all(fetchPromises);
+		zip.generateAsync({ type: "blob" }).then(content => {
+			saveAs(content, "game.zip");
+		});
+	});
+	loadColorJson();
 </script>
-
 </body>
 </html>
